@@ -204,6 +204,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
     public void completePlayerMove() {
         if (!isWhiteTurn) {
             chessAI.makeMove(chessBoard);
+            chessAI.debugPrintAllLegalMoves(chessBoard);
             isWhiteTurn = true; // Switch back to player's turn
             repaint();
         }

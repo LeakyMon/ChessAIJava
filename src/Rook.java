@@ -35,10 +35,17 @@ public class Rook extends ChessPiece{
                     return false; // There is a piece blocking the path
                 }
             }
-            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
-                System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
-                return true; // Capturing diagonally
+            if (board[endRow][endCol] != null){
+                if (!board[endRow][endCol].getColor().equals(this.color)) {
+                    System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
+                    return true; // Capturing diagonally
+                }
+                else {
+                    System.out.println("cant eat  your own color");
+                    return false;
+                }
             }
+
             //return false; // Horizontal move is valid
         }
         else if (startRow != endRow && startCol != endCol){
