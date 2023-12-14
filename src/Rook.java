@@ -17,36 +17,42 @@ public class Rook extends ChessPiece{
             int tempInt = startRow + direction;
             System.out.println(tempInt);
 
-            for (int i = startRow + direction; i != endRow + direction; i+= direction){
+            for (int i = startRow + direction; i != endRow; i += direction) {
                 if (board[i][startCol] != null) {
-                    return !board[i][startCol].getColor(board[i][startCol]).equals("White"); // There is a piece blocking the path
+                    return false; // There is a piece blocking the path
                 }
             }
             if (board[endRow][endCol] != null && !board[endRow][endCol].getColor(board[endRow][endCol]).equals(this.color)) {
                 System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing vertically
             }
-            return true;
+            //return false;
         }
         if (startRow == endRow) {
             int direction = (startCol < endCol) ? 1 : -1; // Determines direction based on the target column
             for (int i = startCol + direction; i != endCol; i += direction) {
                 if (board[startRow][i] != null) {
-                    return !board[startRow][i].getColor(board[startRow][i]).equals("White"); // There is a piece blocking the path
+                    return false; // There is a piece blocking the path
                 }
             }
             if (board[endRow][endCol] != null && !board[endRow][endCol].getColor(board[endRow][endCol]).equals(this.color)) {
                 System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing diagonally
             }
-            return true; // Horizontal move is valid
+            //return false; // Horizontal move is valid
+        }
+        else if (startRow != endRow && startCol != endCol){
+            return false;
+        }
+        else if (board[endRow][endCol] != null && board[endRow][endCol].getColor(board[endRow][endCol]).equals(this.color)){
+            return false;
         }
 
         // Check for capture move
 
         System.out.println("Conditions not met");
 
-        return false; // If none of the above conditions are met, it's an invalid move
+        return true; // If none of the above conditions are met, it's an invalid move
 
 
         //return false;
