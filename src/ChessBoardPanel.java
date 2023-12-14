@@ -4,9 +4,11 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 
-public class ChessBoardPanel extends JPanel {
+public class ChessBoardPanel extends JPanel implements MouseListener {
     private static final int SIZE = 8;
     private static final int SQUARE_SIZE = 60;
     private Image wRook, wKnight, wBishop, wQueen, wKing, wPawn;
@@ -14,6 +16,7 @@ public class ChessBoardPanel extends JPanel {
 
     public ChessBoardPanel() {
         loadImages();
+        addMouseListener(this);
     }
 
     private void loadImages() {
@@ -85,4 +88,72 @@ public class ChessBoardPanel extends JPanel {
         g.drawImage(wQueen, 3 * SQUARE_SIZE, 7 * SQUARE_SIZE, this);  // White Queen at 3,7
         g.drawImage(wKing, 4 * SQUARE_SIZE, 7 * SQUARE_SIZE, this);   // White King at 4,7
     }
+
+    public void mouseClicked(MouseEvent e) {
+        int x = e.getX(); // Get the x-coordinate of the mouse click
+        int y = e.getY(); // Get the y-coordinate of the mouse click
+
+        // Calculate which square is clicked
+        int row = y / SQUARE_SIZE;
+        int col = x / SQUARE_SIZE;
+
+        String pos = squareToLetter(col,row);
+        System.out.println("Square Selected " + pos);
+
+    }
+
+    // Other required methods of MouseListener (empty implementations if not used)
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
+
+    public String squareToLetter(int col, int row) {
+
+        String loc = "";
+
+// Inverting the row number
+        int invertedRow = 7 - row;
+
+        switch (col) {
+            case 0:
+                loc = "A";
+                break;
+            case 1:
+                loc = "B";
+                break;
+            case 2:
+                loc = "C";
+                break;
+            case 3:
+                loc = "D";
+                break;
+            case 4:
+                loc = "E";
+                break;
+            case 5:
+                loc = "F";
+                break;
+            case 6:
+                loc = "G";
+                break;
+            case 7:
+                loc = "H";
+                break;
+            case 8:
+                loc = "I";
+                break;
+            default:
+                break;
+        }
+
+        loc += (invertedRow + 1);
+
+        return loc;
+    }
+
 }
