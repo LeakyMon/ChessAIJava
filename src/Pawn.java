@@ -7,6 +7,7 @@ public class Pawn extends ChessPiece {
 
     @Override
     public boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board) {
+        System.out.println("in pawn");
         // Basic movement: Pawns move forward one square, but on their first move, they can move two squares
         // Capturing: Pawns capture diagonally
         ChessPiece pawn = board[startRow][startCol];
@@ -28,7 +29,12 @@ public class Pawn extends ChessPiece {
                 System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing diagonally
             }
-      }
+        }
+
+        //LOGIC FOR IF PAWN MAKES IT TO OTHER SIDE OF BOARD
+
+
+
         System.out.println("Conditions not met");
 
         return false; // If none of the above conditions are met, it's an invalid move

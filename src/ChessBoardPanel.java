@@ -160,42 +160,33 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         String pos = squareToLetter(col,row);
         System.out.println("Square Selected " + pos);
         ChessPiece tempPiece = chessBoard.getPiece(row,col);
-        //If its an empty square and no piece is previously selected
-        if (tempPiece == null && !pieceSelected){
-            System.out.println("Please select a valid piece");
-        }
-        //If user selects a black piece without previously selecting a piece
-        else if (tempPiece != null && tempPiece.getColor(tempPiece).equals("Black") && !pieceSelected){
-            System.out.println("Select a white piece");
-        }
-        //If the same piece is selected twice
-        else if (pieceSelected && selectedRow == row && selectedCol == col) {
-            // Deselect if the same piece is clicked again
-            selectedPiece= null;
-            pieceSelected = false;
-        }
-        //If a white piece is previously selected and the destination is valid
-        else if (pieceSelected && selectedPiece.isValidMove(selectedRow,selectedCol,row,col, chessBoard.getBoard())){
-            chessBoard.movePiece(selectedRow, selectedCol, row, col );
-            pieceSelected=false;
-            selectedPiece=null;
-        }
-        else {
-            //If user selects a valid piece
-            if (tempPiece != null){
-                selectedPiece = tempPiece;
+
+        if (selectedPiece != null) {
+            // VALID MOVE
+            if (selectedPiece.isValidMove(selectedRow, selectedCol, row, col, chessBoard.getBoard())) {
+                // Make the move
+                chessBoard.movePiece(selectedRow, selectedCol, row, col);
+                pieceSelected = false;
+                selectedPiece = null;
+            }
+            //NOT A VALID MOVE FOR PIECE
+            else {
+                System.out.println("Not a valid move");
+                pieceSelected = false;
+                selectedPiece = null;
+            }
+        } else {
+            // Check if the clicked square contains a piece of the current player's color
+            ChessPiece clickedPiece = chessBoard.getPiece(row, col);
+            if (clickedPiece != null && clickedPiece.getColor(clickedPiece).equals("White")) {
+                // Only select the piece if it's the same color as the current player's turn
+                selectedPiece = clickedPiece;
                 selectedRow = row;
                 selectedCol = col;
                 pieceSelected = true;
+            } else {
+                System.out.println("Empty space or opponents color");
             }
-            //If user selected a valid piece but not a valid destination
-            else {
-                pieceSelected = false;
-                selectedPiece = null;
-                selectedRow = -1;
-                selectedCol = -1;
-            }
-
         }
 
         repaint();
