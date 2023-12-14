@@ -19,6 +19,18 @@ public class Move {
         this.endY = endY;
         this.piece = piece;
     }
+    public int getInitX(){
+        return this.startX;
+    }
+    public int getInitY(){
+        return this.startY;
+    }
+    public int getNewX(){
+        return this.endX;
+    }
+    public int getNewY(){
+        return this.endY;
+    }
 
     @Override
     public String toString() {

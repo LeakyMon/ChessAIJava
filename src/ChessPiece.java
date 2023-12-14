@@ -22,6 +22,12 @@ public abstract class ChessPiece {
     public String getColor(){
         return this.color;
     }
+    public void setHasMoved(boolean didMove){
+        this.hasMoved=didMove;
+    }
+    public boolean getHasMoved(ChessPiece piece){
+        return piece.hasMoved;
+    }
     public void setColor(String color){
         this.color = color;
     }

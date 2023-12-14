@@ -27,7 +27,7 @@ public class Queen extends ChessPiece {
         }
 
         // Check for capturing an opponent's piece
-        if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals("White")) {
+        if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.getColor())) {
             System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
             return true;
         }
