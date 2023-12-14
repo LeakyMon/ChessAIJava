@@ -208,6 +208,18 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
             repaint();
         }
     }
+    public void resetGame() {
+        // Reset the chess board to its initial state
+        chessBoard.initializeBoard();
+
+
+        // Reset any other state variables, like whose turn it is
+        isWhiteTurn = true;
+        selectedPiece = null;
+        pieceSelected = false;
+        repaint();
+    }
+
 
 
     // Other required methods of MouseListener (empty implementations if not used)

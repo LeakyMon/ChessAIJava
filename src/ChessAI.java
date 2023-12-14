@@ -5,6 +5,13 @@ import java.util.Random;
 public class ChessAI {
     private static final int SIZE = 8;
     private static final int SQUARE_SIZE = 60;
+
+    public void CalculateBestMove(){
+
+
+
+    }
+
     public void makeMove(ChessBoard chessBoard) {
         // Basic logic to move the first black pawn found
         for (int i = 0; i < SIZE; i++) {

@@ -7,7 +7,15 @@ public class ChessBoard {
         initializeBoard();
     }
 
-    private void initializeBoard() {
+    void initializeBoard() {
+        //clear board
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                board[row][col] = null; // Set each square to null
+            }
+        }
+
+
         for (int i = 0; i < 8; i++) {
             board[1][i] = new Pawn("Pawn", "Black");
             board[6][i] = new Pawn("Pawn", "White");

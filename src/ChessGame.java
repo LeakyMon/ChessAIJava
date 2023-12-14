@@ -22,7 +22,7 @@ public class ChessGame {
         frame.add(chessBoardPanel, BorderLayout.CENTER); // Use the instance variable here
         // ... Other GUI components like settings panel
 
-        settings = new Settings();
+        settings = new Settings(chessBoardPanel);
         frame.add(settings, BorderLayout.SOUTH);
 
         frame.pack();
@@ -34,6 +34,8 @@ public class ChessGame {
 
     public static void main(String[] args) {
         new ChessGame();
+
+        System.out.println("hey");
 
     }
 

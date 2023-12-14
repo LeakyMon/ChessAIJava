@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 
 public class Settings extends JPanel{
-    public Settings() {
+    public Settings(ChessBoardPanel chessBoardPanel) {
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
         JButton undoButton = new JButton("Undo");
@@ -18,25 +18,29 @@ public class Settings extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Undo Clicked");
+
+
             }
         });
         // Similarly, add listeners for redo, restart, and exit
         redoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Undo action
+                // Redo
             }
         });
         restartButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Undo action
+                chessBoardPanel.resetGame();
+
+
             }
         });
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Undo action
+                // Exit Button
             }
         });
 
