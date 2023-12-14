@@ -1,5 +1,4 @@
 import javax.swing.JPanel;
-import javax.swing.ImageIcon;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -7,14 +6,22 @@ import javax.imageio.ImageIO;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+//CONNECTIONS ChessGame, ChessPiece, Player
 
 public class ChessBoardPanel extends JPanel implements MouseListener {
     private static final int SIZE = 8;
     private static final int SQUARE_SIZE = 60;
     private Image wRook, wKnight, wBishop, wQueen, wKing, wPawn;
     private Image Rook, Knight, Bishop, Queen, King, Pawn;
+    private ChessBoard chessBoard;
+    private int selectedRow = -1;
+    private int selectedCol = -1;
+    private boolean pieceSelected = false;
+    private ChessPiece selectedPiece;
+
 
     public ChessBoardPanel() {
+        chessBoard = new ChessBoard();
         loadImages();
         addMouseListener(this);
     }
@@ -44,8 +51,28 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawBoard(g);
-        drawPieces(g);
+        initializeBoardPieces(g);
+        if (pieceSelected) {
+            highlightTile(g, selectedRow, selectedCol);
+            drawSelectedPiece(g, selectedRow, selectedCol);
+        }
     }
+    private void highlightTile(Graphics g, int row, int col) {
+        g.setColor(new Color(255, 255, 0, 128)); // Semi-transparent yellow, for example
+        g.fillRect(col * SQUARE_SIZE, row * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+    }
+
+    private void drawSelectedPiece(Graphics g, int row, int col) {
+        ChessPiece piece = chessBoard.getPiece(row,col);
+        if (piece != null) {
+            //Image pieceImage = // get the image for this piece
+                    // Draw the piece larger or with a border
+                    // Adjust the x, y, width, and height as needed for the larger size
+              //g.drawImage(pieceImage, col * SQUARE_SIZE, row * SQUARE_SIZE, largerWidth, largerHeight, this);
+        }
+    }
+
+
 
     private void drawBoard(Graphics g) {
         for (int i = 0; i < SIZE; i++) {
@@ -60,33 +87,66 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         }
     }
 
-    private void drawPieces(Graphics g) {
+    private void initializeBoardPieces(Graphics g) {
         // Drawing Pawns
         for (int i = 0; i < SIZE; i++) {
-            g.drawImage(wPawn, i * SQUARE_SIZE, 6 * SQUARE_SIZE, this);
-            g.drawImage(Pawn, i * SQUARE_SIZE, 1 * SQUARE_SIZE, this);
+            for (int j = 0; j < SIZE; j++) {
+                ChessPiece piece = chessBoard.getPiece(i, j);
+                if (piece != null) {
+                    // Draw the piece. You need to determine which image to use based on the piece type and color.
+                    Image pieceImage = getPieceImage(piece);
+                    g.drawImage(pieceImage, j * SQUARE_SIZE, i * SQUARE_SIZE, this);
+                }
+            }
+        }
+    }
+
+
+    private Image getPieceImage(ChessPiece piece) {
+        //White pawn
+        if (piece.getColor(piece).equals("White")){
+            if (piece.getType(piece).equals("Pawn")){
+                return wPawn;
+            }
+            else if (piece.getType(piece).equals("Rook")){
+                return wRook;
+            }
+            else if (piece.getType(piece).equals("Knight")){
+                return wKnight;
+            }
+            else if (piece.getType(piece).equals("Bishop")){
+                return wBishop;
+            }
+            else if (piece.getType(piece).equals("King")){
+                return wKing;
+            }
+            else if (piece.getType(piece).equals("Queen")){
+                return wQueen;
+            }
         }
 
-        // Drawing Rooks
-        g.drawImage(wRook, 0, 7 * SQUARE_SIZE, this);
-        g.drawImage(wRook, 7 * SQUARE_SIZE, 7 * SQUARE_SIZE, this);
-        g.drawImage(Rook, 0, 0, this);
-        g.drawImage(Rook, 7 * SQUARE_SIZE, 0, this);
+        else {
+            if (piece.getType(piece).equals("Pawn")){
+                return Pawn;
+            }
+            else if (piece.getType(piece).equals("Rook")){
+                return Rook;
+            }
+            else if (piece.getType(piece).equals("Knight")){
+                return Knight;
+            }
+            else if (piece.getType(piece).equals("Bishop")){
+                return Bishop;
+            }
+            else if (piece.getType(piece).equals("King")){
+                return King;
+            }
+            else if (piece.getType(piece).equals("Queen")){
+                return Queen;
+            }
+        }
 
-        g.drawImage(Knight, 1 * SQUARE_SIZE, 0, this); // Black Knight at 1,0
-        g.drawImage(Knight, 6 * SQUARE_SIZE, 0, this); // Black Knight at 6,0
-        g.drawImage(Bishop, 2 * SQUARE_SIZE, 0, this); // Black Bishop at 2,0
-        g.drawImage(Bishop, 5 * SQUARE_SIZE, 0, this); // Black Bishop at 5,0
-        g.drawImage(Queen, 3 * SQUARE_SIZE, 0, this);  // Black Queen at 3,0
-        g.drawImage(King, 4 * SQUARE_SIZE, 0, this);   // Black King at 4,0
-
-        // Drawing White Pieces
-        g.drawImage(wKnight, 1 * SQUARE_SIZE, 7 * SQUARE_SIZE, this); // White Knight at 1,7
-        g.drawImage(wKnight, 6 * SQUARE_SIZE, 7 * SQUARE_SIZE, this); // White Knight at 6,7
-        g.drawImage(wBishop, 2 * SQUARE_SIZE, 7 * SQUARE_SIZE, this); // White Bishop at 2,7
-        g.drawImage(wBishop, 5 * SQUARE_SIZE, 7 * SQUARE_SIZE, this); // White Bishop at 5,7
-        g.drawImage(wQueen, 3 * SQUARE_SIZE, 7 * SQUARE_SIZE, this);  // White Queen at 3,7
-        g.drawImage(wKing, 4 * SQUARE_SIZE, 7 * SQUARE_SIZE, this);   // White King at 4,7
+       return null;
     }
 
     public void mouseClicked(MouseEvent e) {
@@ -99,8 +159,37 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
 
         String pos = squareToLetter(col,row);
         System.out.println("Square Selected " + pos);
+        ChessPiece tempPiece = chessBoard.getPiece(row,col);
+        //System.out.println(tempPiece.getType(tempPiece) + " " + tempPiece.getColor(tempPiece));
+        if (tempPiece == null && !pieceSelected){
+            System.out.println("Please select a valid piece");
+        }
+        else if (tempPiece != null && tempPiece.getColor(tempPiece).equals("Black")){
+            System.out.println("Select a white piece");
+        }
+        else if (pieceSelected && selectedRow == row && selectedCol == col) {
+            // Deselect if the same piece is clicked again
+            selectedPiece= null;
+            pieceSelected = false;
+        }
+        else if (pieceSelected && selectedPiece.isValidMove(selectedRow,selectedCol,row,col, chessBoard.getBoard())){
+            chessBoard.movePiece(selectedRow, selectedCol, row, col );
+            pieceSelected=false;
+            selectedPiece=null;
+        }
+        else {
+            selectedPiece = tempPiece;
+            selectedRow = row;
+            selectedCol = col;
+            pieceSelected = true;
+        }
+
+        repaint();
 
     }
+
+
+
 
     // Other required methods of MouseListener (empty implementations if not used)
     @Override
