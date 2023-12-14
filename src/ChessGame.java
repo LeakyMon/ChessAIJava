@@ -20,16 +20,6 @@ public class ChessGame {
         frame.setSize(500,600);
         frame.setVisible(true);
 
-
-        startGame();
-
-    }
-    public static void startGame(){
-        Player newPlayer = new Player(true);
-
-
-
-
     }
 
 

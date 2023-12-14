@@ -160,28 +160,42 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         String pos = squareToLetter(col,row);
         System.out.println("Square Selected " + pos);
         ChessPiece tempPiece = chessBoard.getPiece(row,col);
-        //System.out.println(tempPiece.getType(tempPiece) + " " + tempPiece.getColor(tempPiece));
+        //If its an empty square and no piece is previously selected
         if (tempPiece == null && !pieceSelected){
             System.out.println("Please select a valid piece");
         }
-        else if (tempPiece != null && tempPiece.getColor(tempPiece).equals("Black")){
+        //If user selects a black piece without previously selecting a piece
+        else if (tempPiece != null && tempPiece.getColor(tempPiece).equals("Black") && !pieceSelected){
             System.out.println("Select a white piece");
         }
+        //If the same piece is selected twice
         else if (pieceSelected && selectedRow == row && selectedCol == col) {
             // Deselect if the same piece is clicked again
             selectedPiece= null;
             pieceSelected = false;
         }
+        //If a white piece is previously selected and the destination is valid
         else if (pieceSelected && selectedPiece.isValidMove(selectedRow,selectedCol,row,col, chessBoard.getBoard())){
             chessBoard.movePiece(selectedRow, selectedCol, row, col );
             pieceSelected=false;
             selectedPiece=null;
         }
         else {
-            selectedPiece = tempPiece;
-            selectedRow = row;
-            selectedCol = col;
-            pieceSelected = true;
+            //If user selects a valid piece
+            if (tempPiece != null){
+                selectedPiece = tempPiece;
+                selectedRow = row;
+                selectedCol = col;
+                pieceSelected = true;
+            }
+            //If user selected a valid piece but not a valid destination
+            else {
+                pieceSelected = false;
+                selectedPiece = null;
+                selectedRow = -1;
+                selectedCol = -1;
+            }
+
         }
 
         repaint();
