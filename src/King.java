@@ -22,7 +22,7 @@ public class King extends ChessPiece{
         if (startCol == endCol){
             int direction = (startRow < endRow) ? 1 : -1; // Determines direction based on the target column
             if (board[endRow][startCol] != null) {
-                return !board[endRow][startCol].getColor(board[endRow][startCol]).equals("White"); // There is a piece blocking the path
+                return !board[endRow][startCol].getColor().equals("White"); // There is a piece blocking the path
             }
             return true;
         }
@@ -30,7 +30,7 @@ public class King extends ChessPiece{
         if (startRow == endRow){
             int direction = (startCol < endCol) ? 1 : -1; // Determines direction based on the target column
             if (board[startRow][endCol] != null) {
-                return !board[startRow][endCol].getColor(board[startRow][endCol]).equals("White"); // There is a piece blocking the path
+                return !board[startRow][endCol].getColor().equals("White"); // There is a piece blocking the path
             }
         }
 
@@ -46,7 +46,7 @@ public class King extends ChessPiece{
             return true;
         }
         else {
-            if (board[startRow+rowDirection][startCol+colDirection].getColor(board[startRow+rowDirection][startCol+colDirection]).equals("White")){
+            if (board[startRow+rowDirection][startCol+colDirection].getColor().equals("White")){
                 return false;
             }
             else {

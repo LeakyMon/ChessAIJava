@@ -5,23 +5,37 @@ import javax.swing.JFrame;
 //CONNECTIONS: ChessBoardPanel | Settings | Player | ChessAI
 
 public class ChessGame {
+    private ChessAI chessAI;
+    private ChessBoardPanel chessBoardPanel;
+    private JFrame frame;
+    private Settings settings;
+
+    public ChessGame(){
+        chessAI = new ChessAI();
+        chessBoardPanel = new ChessBoardPanel(chessAI);
+
+        chessAI = new ChessAI();
+
+        frame = new JFrame("Chess Game");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+        frame.add(chessBoardPanel, BorderLayout.CENTER); // Use the instance variable here
+        // ... Other GUI components like settings panel
+
+        settings = new Settings();
+        frame.add(settings, BorderLayout.SOUTH);
+
+        frame.pack();
+        frame.setSize(500, 600);
+        frame.setVisible(true);
+    }
 
     boolean PlayerTurn = true;
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Chess Game");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout()); // Set the layout to BorderLayout
-        frame.add(new ChessBoardPanel(), BorderLayout.CENTER); // Add the chessboard to the center
-        // Create and add the settings panel to the bottom (south)
-        Settings settingsPanel = new Settings();
-        frame.add(settingsPanel, BorderLayout.SOUTH);
-        frame.pack(); // This will adjust the size of the frame to fit its contents
-        frame.setSize(500,600);
-        frame.setVisible(true);
+        new ChessGame();
 
     }
-
 
 
 }

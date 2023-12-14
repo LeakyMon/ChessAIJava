@@ -25,7 +25,7 @@ public class Pawn extends ChessPiece {
         if (Math.abs(startCol - endCol) == 1 && (endRow - startRow) == direction) {
             System.out.println(this.color);
             System.out.println();
-            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor(board[endRow][endCol]).equals(this.color)) {
+            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
                 System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing diagonally
             }

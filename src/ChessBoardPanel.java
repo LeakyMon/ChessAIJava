@@ -18,12 +18,14 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
     private int selectedCol = -1;
     private boolean pieceSelected = false;
     private ChessPiece selectedPiece;
+    private boolean isWhiteTurn = true;
+    private ChessAI chessAI;
 
-
-    public ChessBoardPanel() {
+    public ChessBoardPanel(ChessAI chessAI) {
         chessBoard = new ChessBoard();
         loadImages();
         addMouseListener(this);
+        this.chessAI = chessAI;
     }
 
     private void loadImages() {
@@ -104,7 +106,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
 
     private Image getPieceImage(ChessPiece piece) {
         //White pawn
-        if (piece.getColor(piece).equals("White")){
+        if (piece.getColor().equals("White")){
             if (piece.getType(piece).equals("Pawn")){
                 return wPawn;
             }
@@ -150,50 +152,62 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
     }
 
     public void mouseClicked(MouseEvent e) {
-        int x = e.getX(); // Get the x-coordinate of the mouse click
-        int y = e.getY(); // Get the y-coordinate of the mouse click
+        if (isWhiteTurn) {
+            int x = e.getX(); // Get the x-coordinate of the mouse click
+            int y = e.getY(); // Get the y-coordinate of the mouse click
 
-        // Calculate which square is clicked
-        int row = y / SQUARE_SIZE;
-        int col = x / SQUARE_SIZE;
+            // Calculate which square is clicked
+            int row = y / SQUARE_SIZE;
+            int col = x / SQUARE_SIZE;
 
-        String pos = squareToLetter(col,row);
-        System.out.println("Square Selected " + pos);
-        ChessPiece tempPiece = chessBoard.getPiece(row,col);
+            String pos = squareToLetter(col, row);
+            System.out.println("Square Selected " + pos);
+            ChessPiece tempPiece = chessBoard.getPiece(row, col);
 
-        if (selectedPiece != null) {
-            // VALID MOVE
-            if (selectedPiece.isValidMove(selectedRow, selectedCol, row, col, chessBoard.getBoard())) {
-                // Make the move
-                chessBoard.movePiece(selectedRow, selectedCol, row, col);
-                pieceSelected = false;
-                selectedPiece = null;
-            }
-            //NOT A VALID MOVE FOR PIECE
-            else {
-                System.out.println("Not a valid move");
-                pieceSelected = false;
-                selectedPiece = null;
-            }
-        } else {
-            // Check if the clicked square contains a piece of the current player's color
-            ChessPiece clickedPiece = chessBoard.getPiece(row, col);
-            if (clickedPiece != null && clickedPiece.getColor(clickedPiece).equals("White")) {
-                // Only select the piece if it's the same color as the current player's turn
-                selectedPiece = clickedPiece;
-                selectedRow = row;
-                selectedCol = col;
-                pieceSelected = true;
+
+            if (selectedPiece != null) {
+                // VALID MOVE
+                if (selectedPiece.isValidMove(selectedRow, selectedCol, row, col, chessBoard.getBoard())) {
+                    // Make the move
+                    chessBoard.movePiece(selectedRow, selectedCol, row, col);
+                    pieceSelected = false;
+                    selectedPiece = null;
+                    isWhiteTurn = false;
+
+                }
+                //NOT A VALID MOVE FOR PIECE
+                else {
+                    System.out.println("Not a valid move");
+                    pieceSelected = false;
+                    selectedPiece = null;
+                }
             } else {
-                System.out.println("Empty space or opponents color");
+                // Check if the clicked square contains a piece of the current player's color
+                ChessPiece clickedPiece = chessBoard.getPiece(row, col);
+                if (clickedPiece != null && clickedPiece.getColor().equals("White")) {
+                    // Only select the piece if it's the same color as the current player's turn
+                    selectedPiece = clickedPiece;
+                    selectedRow = row;
+                    selectedCol = col;
+                    pieceSelected = true;
+                } else {
+                    System.out.println("Empty space or opponents color");
+                }
             }
-        }
 
-        repaint();
+            repaint();
+            completePlayerMove();
+        }
 
     }
 
-
+    public void completePlayerMove() {
+        if (!isWhiteTurn) {
+            chessAI.makeMove(chessBoard);
+            isWhiteTurn = true; // Switch back to player's turn
+            repaint();
+        }
+    }
 
 
     // Other required methods of MouseListener (empty implementations if not used)

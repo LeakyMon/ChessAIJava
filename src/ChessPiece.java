@@ -19,8 +19,8 @@ public abstract class ChessPiece {
     public void setType(String type){
         this.type = type;
     }
-    public String getColor(ChessPiece piece){
-        return piece.color;
+    public String getColor(){
+        return this.color;
     }
     public void setColor(String color){
         this.color = color;

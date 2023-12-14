@@ -22,7 +22,7 @@ public class Rook extends ChessPiece{
                     return false; // There is a piece blocking the path
                 }
             }
-            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor(board[endRow][endCol]).equals(this.color)) {
+            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
                 System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing vertically
             }
@@ -35,7 +35,7 @@ public class Rook extends ChessPiece{
                     return false; // There is a piece blocking the path
                 }
             }
-            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor(board[endRow][endCol]).equals(this.color)) {
+            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
                 System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing diagonally
             }
@@ -44,7 +44,7 @@ public class Rook extends ChessPiece{
         else if (startRow != endRow && startCol != endCol){
             return false;
         }
-        else if (board[endRow][endCol] != null && board[endRow][endCol].getColor(board[endRow][endCol]).equals(this.color)){
+        else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(this.color)){
             return false;
         }
 
