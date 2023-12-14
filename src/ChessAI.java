@@ -54,7 +54,37 @@ public class ChessAI {
 
         }
         if (piece instanceof Bishop){
+            int[][] directions = {
+                    {-1, -1}, {-1, 1},
+                    {1, -1}, {1, 1}
+            };
 
+            for (int[] direction : directions) {
+                int currentRow = row;
+                int currentCol = col;
+
+                while (true) {
+                    currentRow += direction[0];
+                    currentCol += direction[1];
+
+                    // Check if the new position is within bounds
+                    if (currentRow < 0 || currentRow >= SIZE || currentCol < 0 || currentCol >= SIZE) {
+                        break; // Break if out of bounds
+                    }
+
+                    // Use the isValidMove method to check if the move is legal
+                    if (piece.isValidMove(row, col, currentRow, currentCol, chessBoard.getBoard())) {
+                        allBlackMoves.add(new Move(piece, row, col, currentRow, currentCol));
+
+                        // If there is a piece at the destination, we must break, whether it's a capture or our own piece
+                        if (chessBoard.getPiece(currentRow, currentCol) != null) {
+                            break;
+                        }
+                    } else {
+                        break; // If the move is not valid, break out of the loop
+                    }
+                }
+            }
         }
         if (piece instanceof Queen){
             for (int i = 0; i < SIZE; i++) {
@@ -70,13 +100,31 @@ public class ChessAI {
             }
         }
         if (piece instanceof King){
+            int[][] kingMoves = {
+                    {-1, -1}, {-1, 0}, {-1, 1}, // Up-Left, Up, Up-Right
+                    {0, -1},           {0, 1},   // Left, Right
+                    {1, -1}, {1, 0}, {1, 1}      // Down-Left, Down, Down-Right
+            };
 
+            for (int[] move : kingMoves) {
+                int newRow = row + move[0];
+                int newCol = col + move[1];
+
+                // Ensure the new position is on the board
+                if (newRow >= 0 && newRow < SIZE && newCol >= 0 && newCol < SIZE) {
+                    if (piece.isValidMove(row, col, newRow, newCol, chessBoard.getBoard())) {
+                        // If the destination is empty or contains an opponent's piece, add the move
+                        if (chessBoard.getPiece(newRow, newCol) == null ||
+                                !chessBoard.getPiece(newRow, newCol).getColor().equals(piece.getColor())) {
+                            allBlackMoves.add(new Move(piece, row, col, newRow, newCol));
+                        }
+                    }
+                }
+            }
         }
 
         // Add similar logic for other types of pieces (Rooks, Knights, etc.)
     }
-
-
 
     private Move selectBestMove(List<Move> moves) {
         // Logic to evaluate and select the best move

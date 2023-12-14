@@ -9,50 +9,27 @@ public class King extends ChessPiece{
 
         int rowDiff = Math.abs(endRow - startRow);
         int colDiff = Math.abs(endCol - startCol);
-        //if verticle
-        if (rowDiff > 1 || colDiff > 1){
-            System.out.println("King can move that far");
-            return false;
-        }
-        // Check if the move is diagonal (rowDiff should equal colDiff)
-        if (rowDiff != colDiff && (startCol != endCol && startRow != endRow)) {
-            return false; // Not a diagonal move or verticle move
-        }
-        //VERTICLE MOVE
-        if (startCol == endCol){
-            int direction = (startRow < endRow) ? 1 : -1; // Determines direction based on the target column
-            if (board[endRow][startCol] != null) {
-                return !board[endRow][startCol].getColor().equals(this.getColor()); // There is a piece blocking the path
-            }
-            return true;
-        }
-        //HORIZONTAL MOVE
-        if (startRow == endRow){
-            int direction = (startCol < endCol) ? 1 : -1; // Determines direction based on the target column
-            if (board[startRow][endCol] != null) {
-                return !board[startRow][endCol].getColor().equals(this.getColor()); // There is a piece blocking the path
-            }
+        // Check if the move is more than one square in any direction
+        if (rowDiff > 1 || colDiff > 1) {
+            return false; // King cannot move more than one square away
         }
 
-
-
-        //DIAGONAL MOVE
-        int rowDirection = (endRow > startRow) ? 1 : -1;
-        int colDirection = (endCol > startCol) ? 1 : -1;
-        int intermediateRow = startRow * rowDirection;
-        int intermediateCol = startCol * colDirection;
-
-        if (board[startRow+rowDirection][startCol+colDirection] == null){
-            return true;
+        // Ensure the destination square is within the board bounds
+        if (endRow < 0 || endRow >= board.length || endCol < 0 || endCol >= board[0].length) {
+            return false; // Destination is outside the board
         }
-        else {
-            if (board[startRow+rowDirection][startCol+colDirection].getColor().equals(this.getColor())){
+
+        // Check if the destination square is occupied
+        ChessPiece destinationPiece = board[endRow][endCol];
+        if (destinationPiece != null) {
+            // If the destination square is occupied by a piece of the same color, it's not a valid move
+            if (destinationPiece.getColor().equals(this.getColor())) {
                 return false;
             }
-            else {
-                return true;
-            }
         }
+
+        // The move is valid (either moving to an empty square or capturing an opponent's piece)
+        return true;
 
 
         //return false;

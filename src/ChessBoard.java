@@ -63,7 +63,4 @@ public class ChessBoard {
 
 
 
-
-
-    // Additional methods like movePiece, isMoveValid, etc.
 }
