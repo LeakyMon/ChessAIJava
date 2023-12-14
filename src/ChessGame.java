@@ -35,7 +35,7 @@ public class ChessGame {
     public static void main(String[] args) {
         new ChessGame();
 
-        System.out.println("hey");
+        System.out.println("Starting Game");
 
     }
 

@@ -39,7 +39,7 @@ public class Move {
         return piece.getType(piece) + " from " + startSquare + " to " + endSquare;
     }
 
-    private String toBoardCoordinate(int row, int col) {
+    public String toBoardCoordinate(int row, int col) {
         char colLetter = (char) ('A' + col);
         int rowNumber = SIZE - row; // Assuming your board rows start from 0 at the bottom
         return "" + colLetter + rowNumber;

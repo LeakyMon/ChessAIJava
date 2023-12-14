@@ -208,19 +208,28 @@ public class ChessAI {
     }
 
     private void executeMove(Move move, ChessBoard chessBoard) {
-        // Logic to execute the chosen move on the board
+        int initX = move.getInitX();
+        int initY = move.getInitY();
+        int newX = move.getNewX();
+        int newY = move.getNewY();
 
+        ChessPiece targetPiece = chessBoard.getPiece(newX, newY);
+        ChessPiece movingPiece = chessBoard.getPiece(initX, initY);
 
+        // Check if the target square has an opponent's piece
 
-        System.out.println("Executing Move " + move);
-        chessBoard.movePiece(move.getInitX(), move.getInitY(), move.getNewX(), move.getNewY());
+        if (targetPiece != null && !targetPiece.getColor().equals(movingPiece.getColor())) {
+            System.out.println(movingPiece.getType(movingPiece) + " " + movingPiece.getColor() + " captures " + targetPiece.getType(targetPiece) + " at " + move.toBoardCoordinate(newX,newY));
+        }
+
+        // Update the board with the move
+        chessBoard.movePiece(initX, initY, newX, newY);
     }
 
     public void makeMove(ChessBoard chessBoard) {
 
         List<Move> possibleMoves = findAllLegalMoves(chessBoard);
         if (!possibleMoves.isEmpty()) {
-            System.out.println("Not empty");
             Move chosenMove = selectBestMove(possibleMoves, chessBoard);
             executeMove(chosenMove, chessBoard);
         } else {
@@ -231,10 +240,10 @@ public class ChessAI {
     }
     public void debugPrintAllLegalMoves(ChessBoard chessBoard) {
         List<Move> allLegalMoves = findAllLegalMoves(chessBoard);
-        System.out.println("Legal moves for Black:");
-        for (Move move : allLegalMoves) {
-            System.out.println(move);
-        }
+        System.out.println("Legal moves for Black: " + allLegalMoves.size());
+        //for (Move move : allLegalMoves) {
+        //    System.out.println(move);
+        //}
     }
 }
 

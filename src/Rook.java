@@ -15,7 +15,7 @@ public class Rook extends ChessPiece{
         if (startCol == endCol) {
             int direction = (startRow < endRow) ? 1 : -1; // Determines direction based on the target column
             int tempInt = startRow + direction;
-            System.out.println(tempInt);
+            //System.out.println(tempInt);
 
             for (int i = startRow + direction; i != endRow; i += direction) {
                 if (board[i][startCol] != null) {
@@ -56,8 +56,6 @@ public class Rook extends ChessPiece{
         }
 
         // Check for capture move
-
-        System.out.println("Conditions not met");
 
         return true; // If none of the above conditions are met, it's an invalid move
 
