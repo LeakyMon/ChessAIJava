@@ -2,7 +2,7 @@ public class Pawn extends ChessPiece {
 
 
     public Pawn(String type, String color) {
-        super(type, color);
+        super(type, color, 1);
     }
 
     @Override

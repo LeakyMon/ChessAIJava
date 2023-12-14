@@ -6,11 +6,13 @@ public abstract class ChessPiece {
     private String type;
     protected String color;
     protected boolean hasMoved;
+    protected int score;
 
-    public ChessPiece(String type,String color) {
+    public ChessPiece(String type,String color,int score) {
         this.type = type;
         this.color = color;
         this.hasMoved = false;
+        this.score = score;
     }
 
     public String getType(ChessPiece piece){
@@ -30,6 +32,9 @@ public abstract class ChessPiece {
     }
     public void setColor(String color){
         this.color = color;
+    }
+    public int getScore() {
+        return score;
     }
     // Abstract method for validating moves, to be implemented in subclasses
     public abstract boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board);

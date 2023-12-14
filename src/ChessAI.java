@@ -51,7 +51,23 @@ public class ChessAI {
             }
         }
         if (piece instanceof Knight){
+            int[][] knightMoves = {
+                    {-2, -1}, {-2, 1}, // Upwards L-moves
+                    {-1, -2}, {-1, 2}, // Leftward L-moves
+                    {1, -2}, {1, 2},   // Rightward L-moves
+                    {2, -1}, {2, 1}    // Downward L-moves
+            };
 
+            for (int[] move : knightMoves) {
+                int newRow = row + move[0];
+                int newCol = col + move[1];
+
+                if (newRow >= 0 && newRow < SIZE && newCol >= 0 && newCol < SIZE) {
+                    if (piece.isValidMove(row, col, newRow, newCol, chessBoard.getBoard())) {
+                        allBlackMoves.add(new Move(piece, row, col, newRow, newCol));
+                    }
+                }
+            }
         }
         if (piece instanceof Bishop){
             int[][] directions = {
@@ -87,6 +103,38 @@ public class ChessAI {
             }
         }
         if (piece instanceof Queen){
+
+            int[][] queenMoves = {
+                    {-1, -1}, {-1, 0}, {-1, 1}, // Up-Left, Up, Up-Right
+                    {0, -1},           {0, 1},   // Left, Right
+                    {1, -1}, {1, 0}, {1, 1}      // Down-Left, Down, Down-Right
+            };
+            for (int[] move : queenMoves) {
+                int currentRow = row;
+                int currentCol = col;
+
+                while (true) {
+                    currentRow += move[0];
+                    currentCol += move[1];
+
+                    // Check if the new position is within bounds
+                    if (currentRow < 0 || currentRow >= SIZE || currentCol < 0 || currentCol >= SIZE) {
+                        break; // Break if out of bounds
+                    }
+
+                    // Use the isValidMove method to check if the move is legal
+                    if (piece.isValidMove(row, col, currentRow, currentCol, chessBoard.getBoard())) {
+                        allBlackMoves.add(new Move(piece, row, col, currentRow, currentCol));
+
+                        // If there is a piece at the destination, we must break, whether it's a capture or our own piece
+                        if (chessBoard.getPiece(currentRow, currentCol) != null) {
+                            break;
+                        }
+                    } else {
+                        break; // If the move is not valid, break out of the loop
+                    }
+                }
+                /*
             for (int i = 0; i < SIZE; i++) {
                 // Check column moves
                 if (i != col && piece.isValidMove(row, col, row, i, chessBoard.getBoard())) {
@@ -97,6 +145,9 @@ public class ChessAI {
                     allBlackMoves.add(new Move(piece, row, col, i, col));
                 }
 
+            }
+
+                 */
             }
         }
         if (piece instanceof King){
@@ -126,13 +177,41 @@ public class ChessAI {
         // Add similar logic for other types of pieces (Rooks, Knights, etc.)
     }
 
-    private Move selectBestMove(List<Move> moves) {
-        // Logic to evaluate and select the best move
-        return moves.get(new Random().nextInt(moves.size())); // For random selection
+    private Move selectBestMove(List<Move> moves, ChessBoard chessBoard) {
+        Move bestMove = null;
+        int highestScore = 0;
+
+        for (Move move : moves) {
+            if (move.capturesOpponentPiece(move.getNewX(), move.getNewY(), chessBoard)) {
+                ChessPiece targetPiece = chessBoard.getPiece(move.getNewX(), move.getNewY());
+                ChessPiece movingPiece = chessBoard.getPiece(move.getInitX(), move.getInitY());
+
+                if (targetPiece != null && !targetPiece.getColor().equals(movingPiece.getColor())) {
+                    int score = targetPiece.getScore();
+
+                    System.out.println("Evaluating move " + move + " with score " + score);
+
+                    if (score > highestScore) {
+                        highestScore = score;
+                        bestMove = move;
+                    }
+                }
+            }
+        }
+
+        if (bestMove != null) {
+            return bestMove;
+        } else {
+            // If no capturing move is found or all are same color, select a random move
+            return moves.get(new Random().nextInt(moves.size()));
+        }
     }
 
     private void executeMove(Move move, ChessBoard chessBoard) {
         // Logic to execute the chosen move on the board
+
+
+
         System.out.println("Executing Move " + move);
         chessBoard.movePiece(move.getInitX(), move.getInitY(), move.getNewX(), move.getNewY());
     }
@@ -142,7 +221,7 @@ public class ChessAI {
         List<Move> possibleMoves = findAllLegalMoves(chessBoard);
         if (!possibleMoves.isEmpty()) {
             System.out.println("Not empty");
-            Move chosenMove = selectBestMove(possibleMoves);
+            Move chosenMove = selectBestMove(possibleMoves, chessBoard);
             executeMove(chosenMove, chessBoard);
         } else {
             System.out.println("No legal moves found");

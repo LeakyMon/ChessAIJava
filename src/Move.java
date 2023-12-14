@@ -45,6 +45,18 @@ public class Move {
         return "" + colLetter + rowNumber;
     }
 
+    public boolean capturesOpponentPiece(int x, int y, ChessBoard chessBoard) {
+
+
+        if (chessBoard.getPiece(x,y) != null){
+            return true;
+        }
+
+        return false;
+
+
+    }
+
     // ... other methods and constructors
 
 
