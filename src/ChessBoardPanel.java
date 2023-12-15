@@ -170,8 +170,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
                 if (selectedPiece.isValidMove(selectedRow, selectedCol, row, col, chessBoard.getBoard())) {
                     // Make the move
                     chessBoard.movePiece(selectedRow, selectedCol, row, col);
-                    pieceSelected = false;
-                    selectedPiece = null;
+
                     System.out.println("Checking for check/checkmate opponent color: " + " Black");
                     if (GameRules.isKingInCheckmate(chessBoard, "Black", chessAI)) {
                         JOptionPane.showMessageDialog(this, "Black" + " is in Checkmate!");
@@ -179,6 +178,8 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
                     } else if (GameRules.isKingInCheck(chessBoard, "Black", chessAI)) {
                         JOptionPane.showMessageDialog(this, "Black" + " is in Check!");
                     }
+                    pieceSelected = false;
+                    selectedPiece = null;
                     isWhiteTurn = false;
 
 

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Objects;
 
 public class ChessAI {
     private static final int SIZE = 8;
@@ -45,7 +46,12 @@ public class ChessAI {
             for (int newRow = row - 1; newRow <= row + 2; newRow++) {
                 for (int newCol = col - 1; newCol <= col + 1; newCol++) {
                     if (newRow >= 0 && newRow < SIZE && newCol >= 0 && newCol < SIZE) {
+                        boolean temp = false;
+                        temp = piece.getHasMoved(piece);
                         if (piece.isValidMove(row, col, newRow, newCol, chessBoard.getBoard())) {
+                            System.out.println(piece.getHasMoved(piece));
+                            piece.setHasMoved(temp);
+                            System.out.println(piece.getHasMoved(piece));
                             allMoves.add(new Move(piece, row, col, newRow, newCol));
                         }
                     }
