@@ -33,6 +33,7 @@ public class ChessGame {
     boolean PlayerTurn = true;
 
     public static void main(String[] args) {
+        new Player(true);
         new ChessGame();
 
         System.out.println("Starting Game");

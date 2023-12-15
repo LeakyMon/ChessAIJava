@@ -6,7 +6,12 @@ public class Player {
         this.turn = turn;
 
     }
-
+    public boolean getPlayerTurn(){
+        return this.turn;
+    }
+    public void setPlayerTurn(boolean turn){
+        this.turn = turn;
+    }
 
 
 }

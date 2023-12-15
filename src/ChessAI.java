@@ -8,13 +8,13 @@ public class ChessAI {
 
 
 
-    private List<Move> findAllLegalMoves(ChessBoard chessBoard) {
+    public List<Move> findAllLegalMoves(ChessBoard chessBoard, String color) {
         ArrayList<Move> allBlackMoves = new ArrayList<>();
 
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 ChessPiece piece = chessBoard.getPiece(i, j);
-                if (piece != null && piece.getColor().equals("Black")) {
+                if (piece != null  && piece.getColor().equals("Black")) {
                     addLegalMovesForPiece(piece, i, j, allBlackMoves, chessBoard);
                 }
             }
@@ -23,7 +23,22 @@ public class ChessAI {
 
         return allBlackMoves;
     }
-    private void addLegalMovesForPiece(ChessPiece piece, int row, int col, List<Move> allBlackMoves, ChessBoard chessBoard) {
+
+    public List<Move> findAllLegalMovesForWhite(ChessBoard chessBoard) {
+        ArrayList<Move> allWhiteMoves = new ArrayList<>();
+
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                ChessPiece piece = chessBoard.getPiece(i, j);
+                if (piece != null && piece.getColor().equals("White")) {
+                    addLegalMovesForPiece(piece, i, j, allWhiteMoves, chessBoard);
+                }
+            }
+        }
+        return allWhiteMoves;
+    }
+
+    private void addLegalMovesForPiece(ChessPiece piece, int row, int col, List<Move> allMoves, ChessBoard chessBoard) {
         // Example for a Pawn
         if (piece instanceof Pawn) {
             // Consider moving forward one and two squares, and capturing moves
@@ -31,7 +46,7 @@ public class ChessAI {
                 for (int newCol = col - 1; newCol <= col + 1; newCol++) {
                     if (newRow >= 0 && newRow < SIZE && newCol >= 0 && newCol < SIZE) {
                         if (piece.isValidMove(row, col, newRow, newCol, chessBoard.getBoard())) {
-                            allBlackMoves.add(new Move(piece, row, col, newRow, newCol));
+                            allMoves.add(new Move(piece, row, col, newRow, newCol));
                         }
                     }
                 }
@@ -42,11 +57,11 @@ public class ChessAI {
             for (int i = 0; i < SIZE; i++) {
                 // Check column moves
                 if (i != col && piece.isValidMove(row, col, row, i, chessBoard.getBoard())) {
-                    allBlackMoves.add(new Move(piece, row, col, row, i));
+                    allMoves.add(new Move(piece, row, col, row, i));
                 }
                 // Check row moves
                 if (i != row && piece.isValidMove(row, col, i, col, chessBoard.getBoard())) {
-                    allBlackMoves.add(new Move(piece, row, col, i, col));
+                    allMoves.add(new Move(piece, row, col, i, col));
                 }
             }
         }
@@ -64,7 +79,7 @@ public class ChessAI {
 
                 if (newRow >= 0 && newRow < SIZE && newCol >= 0 && newCol < SIZE) {
                     if (piece.isValidMove(row, col, newRow, newCol, chessBoard.getBoard())) {
-                        allBlackMoves.add(new Move(piece, row, col, newRow, newCol));
+                        allMoves.add(new Move(piece, row, col, newRow, newCol));
                     }
                 }
             }
@@ -90,7 +105,7 @@ public class ChessAI {
 
                     // Use the isValidMove method to check if the move is legal
                     if (piece.isValidMove(row, col, currentRow, currentCol, chessBoard.getBoard())) {
-                        allBlackMoves.add(new Move(piece, row, col, currentRow, currentCol));
+                        allMoves.add(new Move(piece, row, col, currentRow, currentCol));
 
                         // If there is a piece at the destination, we must break, whether it's a capture or our own piece
                         if (chessBoard.getPiece(currentRow, currentCol) != null) {
@@ -124,7 +139,7 @@ public class ChessAI {
 
                     // Use the isValidMove method to check if the move is legal
                     if (piece.isValidMove(row, col, currentRow, currentCol, chessBoard.getBoard())) {
-                        allBlackMoves.add(new Move(piece, row, col, currentRow, currentCol));
+                        allMoves.add(new Move(piece, row, col, currentRow, currentCol));
 
                         // If there is a piece at the destination, we must break, whether it's a capture or our own piece
                         if (chessBoard.getPiece(currentRow, currentCol) != null) {
@@ -167,7 +182,7 @@ public class ChessAI {
                         // If the destination is empty or contains an opponent's piece, add the move
                         if (chessBoard.getPiece(newRow, newCol) == null ||
                                 !chessBoard.getPiece(newRow, newCol).getColor().equals(piece.getColor())) {
-                            allBlackMoves.add(new Move(piece, row, col, newRow, newCol));
+                            allMoves.add(new Move(piece, row, col, newRow, newCol));
                         }
                     }
                 }
@@ -228,7 +243,7 @@ public class ChessAI {
 
     public void makeMove(ChessBoard chessBoard) {
 
-        List<Move> possibleMoves = findAllLegalMoves(chessBoard);
+        List<Move> possibleMoves = findAllLegalMoves(chessBoard, "Black");
         if (!possibleMoves.isEmpty()) {
             Move chosenMove = selectBestMove(possibleMoves, chessBoard);
             executeMove(chosenMove, chessBoard);
@@ -239,7 +254,7 @@ public class ChessAI {
         }
     }
     public void debugPrintAllLegalMoves(ChessBoard chessBoard) {
-        List<Move> allLegalMoves = findAllLegalMoves(chessBoard);
+        List<Move> allLegalMoves = findAllLegalMoves(chessBoard, "Black");
         System.out.println("Legal moves for Black: " + allLegalMoves.size());
         //for (Move move : allLegalMoves) {
         //    System.out.println(move);

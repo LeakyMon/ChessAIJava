@@ -1,4 +1,4 @@
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -172,7 +172,15 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
                     chessBoard.movePiece(selectedRow, selectedCol, row, col);
                     pieceSelected = false;
                     selectedPiece = null;
+                    System.out.println("Checking for check/checkmate opponent color: " + " Black");
+                    if (GameRules.isKingInCheckmate(chessBoard, "Black", chessAI)) {
+                        JOptionPane.showMessageDialog(this, "Black" + " is in Checkmate!");
+                        // Additional logic to handle the end of the game
+                    } else if (GameRules.isKingInCheck(chessBoard, "Black", chessAI)) {
+                        JOptionPane.showMessageDialog(this, "Black" + " is in Check!");
+                    }
                     isWhiteTurn = false;
+
 
                 }
                 //NOT A VALID MOVE FOR PIECE
@@ -195,19 +203,53 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
                 }
             }
 
+            //pieceSelected = false;
+            //selectedPiece = null;
+
             repaint();
-            completePlayerMove();
+            if (!isWhiteTurn){
+                completePlayerMove();
+            }
         }
 
     }
 
     public void completePlayerMove() {
         if (!isWhiteTurn) {
-            chessAI.makeMove(chessBoard);
-            chessAI.debugPrintAllLegalMoves(chessBoard);
+            if (!isGameOver(chessBoard)) {
+                chessAI.makeMove(chessBoard);
+                chessAI.debugPrintAllLegalMoves(chessBoard);
+            }
+
             isWhiteTurn = true; // Switch back to player's turn
+
+            String opponentColor = isWhiteTurn ? "White" : "Black";
+            System.out.println("Checking for check/checkmate opponent color: " + opponentColor);
+
+            if (GameRules.isKingInCheckmate(chessBoard, opponentColor, chessAI)) {
+                JOptionPane.showMessageDialog(this, opponentColor + " is in Checkmate!");
+                // Additional logic to handle the end of the game
+            } else if (GameRules.isKingInCheck(chessBoard, opponentColor, chessAI)) {
+                JOptionPane.showMessageDialog(this, opponentColor + " is in Check!");
+            }
+
+
             repaint();
         }
+    }
+    private void checkGameState(String opponentColor) {
+        System.out.println("Checking for check/checkmate opponent color: " + opponentColor);
+        if (GameRules.isKingInCheckmate(chessBoard, opponentColor, chessAI)) {
+            JOptionPane.showMessageDialog(this, opponentColor + " is in Checkmate!");
+            // Additional logic to handle the end of the game
+        } else if (GameRules.isKingInCheck(chessBoard, opponentColor, chessAI)) {
+            JOptionPane.showMessageDialog(this, opponentColor + " is in Check!");
+        }
+    }
+    private boolean isGameOver(ChessBoard chessBoard) {
+        // Check for checkmate for both colors
+        return GameRules.isKingInCheckmate(chessBoard, "White", chessAI) ||
+                GameRules.isKingInCheckmate(chessBoard, "Black", chessAI);
     }
     public void resetGame() {
         // Reset the chess board to its initial state
