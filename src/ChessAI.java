@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,17 +28,18 @@ public class ChessAI {
 
     public List<Move> findAllLegalMovesForWhite(ChessBoard chessBoard) {
         ArrayList<Move> allWhiteMoves = new ArrayList<>();
-
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 ChessPiece piece = chessBoard.getPiece(i, j);
                 if (piece != null && piece.getColor().equals("White")) {
+                    System.out.println("Piece: " + piece.getType(piece)+ " ");
                     addLegalMovesForPiece(piece, i, j, allWhiteMoves, chessBoard);
                 }
             }
         }
         return allWhiteMoves;
     }
+
 
     private void addLegalMovesForPiece(ChessPiece piece, int row, int col, List<Move> allMoves, ChessBoard chessBoard) {
         // Example for a Pawn
@@ -49,9 +51,9 @@ public class ChessAI {
                         boolean temp = false;
                         temp = piece.getHasMoved(piece);
                         if (piece.isValidMove(row, col, newRow, newCol, chessBoard.getBoard())) {
-                            System.out.println(piece.getHasMoved(piece));
+                            //System.out.println(piece.getHasMoved(piece));
                             piece.setHasMoved(temp);
-                            System.out.println(piece.getHasMoved(piece));
+                            //System.out.println(piece.getHasMoved(piece));
                             allMoves.add(new Move(piece, row, col, newRow, newCol));
                         }
                     }
@@ -155,20 +157,7 @@ public class ChessAI {
                         break; // If the move is not valid, break out of the loop
                     }
                 }
-                /*
-            for (int i = 0; i < SIZE; i++) {
-                // Check column moves
-                if (i != col && piece.isValidMove(row, col, row, i, chessBoard.getBoard())) {
-                    allBlackMoves.add(new Move(piece, row, col, row, i));
-                }
-                // Check row moves
-                if (i != row && piece.isValidMove(row, col, i, col, chessBoard.getBoard())) {
-                    allBlackMoves.add(new Move(piece, row, col, i, col));
-                }
 
-            }
-
-                 */
             }
         }
         if (piece instanceof King){
@@ -228,7 +217,7 @@ public class ChessAI {
         }
     }
 
-    private void executeMove(Move move, ChessBoard chessBoard) {
+    public void executeMove(Move move, ChessBoard chessBoard) {
         int initX = move.getInitX();
         int initY = move.getInitY();
         int newX = move.getNewX();
@@ -243,25 +232,32 @@ public class ChessAI {
             System.out.println(movingPiece.getType(movingPiece) + " " + movingPiece.getColor() + " captures " + targetPiece.getType(targetPiece) + " at " + move.toBoardCoordinate(newX,newY));
         }
 
+
         // Update the board with the move
         chessBoard.movePiece(initX, initY, newX, newY);
+
+     // if (GameRules.isKingInCheck(chessBoard, "White", newX,newY)) {
+            //JOptionPane.showMessageDialog(this, movingPiece.getColor() + " is in Check!");
+       // }
+
     }
 
-    public void makeMove(ChessBoard chessBoard) {
+    public Move makeMove(ChessBoard chessBoard) {
 
         List<Move> possibleMoves = findAllLegalMoves(chessBoard, "Black");
         if (!possibleMoves.isEmpty()) {
-            Move chosenMove = selectBestMove(possibleMoves, chessBoard);
-            executeMove(chosenMove, chessBoard);
+            return selectBestMove(possibleMoves, chessBoard);
+
         } else {
             System.out.println("No legal moves found");
             // No legal moves found - could be stalemate or checkmate
             // Add logic here to handle endgame conditions
+            return null;
         }
     }
     public void debugPrintAllLegalMoves(ChessBoard chessBoard) {
         List<Move> allLegalMoves = findAllLegalMoves(chessBoard, "Black");
-        System.out.println("Legal moves for Black: " + allLegalMoves.size());
+        System.out.println("Total Num Legal moves for Black: " + allLegalMoves.size());
         //for (Move move : allLegalMoves) {
         //    System.out.println(move);
         //}

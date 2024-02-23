@@ -16,11 +16,11 @@ public class Knight extends ChessPiece{
         if ((rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2)) {
             // Check for capturing an opponent's piece
             if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
-                System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
+                System.out.println("Knight: Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true;
             }
             else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(this.color)){
-                System.out.println("Cannot capture your own pieces");
+                //System.out.println("Cannot capture your own pieces");
                 return false;
             }
             return true; // Valid knight move

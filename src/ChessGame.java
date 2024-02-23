@@ -11,6 +11,7 @@ public class ChessGame {
     private Settings settings;
 
     public ChessGame(){
+
         chessAI = new ChessAI();
         chessBoardPanel = new ChessBoardPanel(chessAI);
 
@@ -37,6 +38,8 @@ public class ChessGame {
         new ChessGame();
 
         System.out.println("Starting Game");
+
+        System.out.println("\n-------WHITE's TURN-------\n");
 
     }
 

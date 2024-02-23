@@ -1,6 +1,10 @@
 
-
 public class ChessBoard {
+
+
+    private Position whiteKingPosition;
+    private Position blackKingPosition;
+
     private ChessPiece[][] board = new ChessPiece[8][8];
 
     public ChessBoard() {
@@ -46,10 +50,16 @@ public class ChessBoard {
         // Initialize Kings
         board[0][4] = new King("King", "Black");
         board[7][4] = new King("King", "White");
+        blackKingPosition = new Position(0, 4); // Store black king's position
+        whiteKingPosition = new Position(7, 4); // Store white king's position
     }
 
     public void movePiece(int startRow, int startCol, int endRow, int endCol) {
         ChessPiece pieceToMove = board[startRow][startCol]; // Get the piece to move
+        //Keep track of king positions
+        if (pieceToMove.getType(pieceToMove).equals("King")){
+            setKingPosition(pieceToMove.color, endRow,endCol);
+        }
         board[startRow][startCol] = null; // Remove the piece from the starting position
         board[endRow][endCol] = pieceToMove; // Place the piece at the target position
     }
@@ -61,6 +71,17 @@ public class ChessBoard {
         return board;
     }
 
+    public void setKingPosition(String color, int row, int col) {
+        if ("White".equals(color)) {
+            whiteKingPosition = new Position(row, col);
+        } else if ("Black".equals(color)) {
+            blackKingPosition = new Position(row, col);
+        }
+    }
+
+    public Position getKingPosition(String color) {
+        return "White".equals(color) ? whiteKingPosition : blackKingPosition;
+    }
 
 
 }

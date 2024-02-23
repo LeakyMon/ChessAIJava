@@ -29,7 +29,7 @@ public class Pawn extends ChessPiece {
             //System.out.println(this.color);
             //System.out.println();
             if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
-                System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
+                System.out.println("Pawn: Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing diagonally
             }
         }

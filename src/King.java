@@ -21,9 +21,12 @@ public class King extends ChessPiece{
 
         // Check if the destination square is occupied
         ChessPiece destinationPiece = board[endRow][endCol];
+        ChessPiece currPiece = board[startRow][startCol];
         if (destinationPiece != null) {
             // If the destination square is occupied by a piece of the same color, it's not a valid move
-            if (destinationPiece.getColor().equals(this.getColor())) {
+            if (destinationPiece.getColor().equals(currPiece.getColor())) {
+                System.out.println(destinationPiece.getColor());
+                System.out.println(this.getColor());
                 return false;
             }
         }
