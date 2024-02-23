@@ -7,7 +7,7 @@ public class Queen extends ChessPiece {
 
         int rowDiff = Math.abs(endRow - startRow);
         int colDiff = Math.abs(endCol - startCol);
-
+        ChessPiece currPiece = board[startRow][startCol];
         // Check if the move is diagonal, vertical, or horizontal
         if (rowDiff != colDiff && startCol != endCol && startRow != endRow) {
             return false; // Not a diagonal, vertical, or horizontal move
@@ -27,11 +27,11 @@ public class Queen extends ChessPiece {
         }
 
         // Check for capturing an opponent's piece
-        if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.getColor())) {
+        if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(currPiece.color)) {
             System.out.println("Queen: Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
             return true;
         }
-        else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(this.color)){
+        else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(currPiece.color)){
             return false;
         }
 

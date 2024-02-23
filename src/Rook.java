@@ -5,8 +5,7 @@ public class Rook extends ChessPiece{
 
     @Override
     public boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board) {
-        // Basic movement: Pawns move forward one square, but on their first move, they can move two squares
-        // Capturing: Pawns capture diagonally
+
         String directionMove = "";
         ChessPiece rook = board[startRow][startCol];
 
@@ -22,7 +21,7 @@ public class Rook extends ChessPiece{
                     return false; // There is a piece blocking the path
                 }
             }
-            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
+            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(rook.color)) {
                 System.out.println("Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true; // Capturing vertically
             }
@@ -36,9 +35,9 @@ public class Rook extends ChessPiece{
                 }
             }
             if (board[endRow][endCol] != null){
-                if (!board[endRow][endCol].getColor().equals(this.color)) {
+                if (!board[endRow][endCol].getColor().equals(rook.color)) {
                     System.out.println("Rook: Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
-                    return true; // Capturing diagonally
+                    return true;
                 }
                 else {
                     //System.out.println("cant eat  your own color");
@@ -51,7 +50,7 @@ public class Rook extends ChessPiece{
         else if (startRow != endRow && startCol != endCol){
             return false;
         }
-        else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(this.color)){
+        else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(rook.color)){
             return false;
         }
 

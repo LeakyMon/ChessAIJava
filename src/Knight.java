@@ -11,15 +11,19 @@ public class Knight extends ChessPiece{
 
         int rowDiff = Math.abs(endRow - startRow);
         int colDiff = Math.abs(endCol - startCol);
-
+        ChessPiece currPiece = board[startRow][startCol];
+        //System.out.println(currPiece.color);
         // Knights move in an L-shape: 2 squares in one direction and 1 square in the perpendicular direction
         if ((rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2)) {
             // Check for capturing an opponent's piece
-            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(this.color)) {
+            //System.out.println(board[endRow][endCol].getColor());
+            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(currPiece.color)) {
+                //System.out.println(board[endRow][endCol].getColor());
                 System.out.println("Knight: Enemy " + board[endRow][endCol].getType(board[endRow][endCol]) + " captured");
                 return true;
             }
-            else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(this.color)){
+            else if (board[endRow][endCol] != null && board[endRow][endCol].getColor().equals(currPiece.color)){
+                //System.out.println(board[endRow][endCol].getColor());
                 //System.out.println("Cannot capture your own pieces");
                 return false;
             }

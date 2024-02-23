@@ -221,18 +221,17 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         System.out.println();
         System.out.println("\n-------BLACK's TURN-------\n");
         if (!isWhiteTurn) {
-            if (!isGameOver(chessBoard)) {
-                Move tempMove = chessAI.makeMove(chessBoard);
-                int r,c;
-                r = tempMove.getNewX();
-                c = tempMove.getNewY();
-                chessAI.executeMove(tempMove, chessBoard);
-                if (GameRules.isKingInCheck(chessBoard, "White", r,c)) {
-                    JOptionPane.showMessageDialog(this, "White is in Check!");
-                }
-                chessAI.debugPrintAllLegalMoves(chessBoard);
-            }
+            Move tempMove = chessAI.makeMove(chessBoard);
+            int r,c;
+            r = tempMove.getNewX();
+            c = tempMove.getNewY();
+            chessAI.executeMove(tempMove, chessBoard);
 
+            chessAI.debugPrintAllLegalMoves(chessBoard);
+
+            if (GameRules.isKingInCheck(chessBoard, "White",r ,c)) {
+                JOptionPane.showMessageDialog(this, "White is in Check!" + chessBoard.getPiece(r,c));
+            }
             isWhiteTurn = true; // Switch back to player's turn
 
             String opponentColor = isWhiteTurn ? "White" : "Black";

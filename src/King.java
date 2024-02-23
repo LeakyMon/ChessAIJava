@@ -25,8 +25,8 @@ public class King extends ChessPiece{
         if (destinationPiece != null) {
             // If the destination square is occupied by a piece of the same color, it's not a valid move
             if (destinationPiece.getColor().equals(currPiece.getColor())) {
-                System.out.println(destinationPiece.getColor());
-                System.out.println(this.getColor());
+                //System.out.println(destinationPiece.getColor());
+               // System.out.println(this.getColor());
                 return false;
             }
         }

@@ -17,7 +17,7 @@ public class GameRules {
         Position kingPosition = chessBoard.getKingPosition(kingColor);
         int kingRow = kingPosition.getRow();
         int kingCol = kingPosition.getCol();
-        ChessPiece tempPiece = chessBoard.getPiece(kingRow,kingCol);
+        ChessPiece tempPiece = chessBoard.getPiece(r,c);
         System.out.println("Row: "+ r + " Col: " + c + "KR: " + kingRow + " KingCol " + kingCol);
         if (tempPiece.isValidMove(r,c,kingRow,kingCol,chessBoard.getBoard())){
             System.out.println("King in check");

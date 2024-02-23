@@ -16,8 +16,10 @@ public class ChessAI {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 ChessPiece piece = chessBoard.getPiece(i, j);
-                if (piece != null  && piece.getColor().equals("Black")) {
+                if (piece != null  && piece.color.equals("Black")) {
+                    //System.out.println("before" + piece.getType(piece) + " ");
                     addLegalMovesForPiece(piece, i, j, allBlackMoves, chessBoard);
+                    //System.out.println("After");
                 }
             }
         }
@@ -32,7 +34,7 @@ public class ChessAI {
             for (int j = 0; j < SIZE; j++) {
                 ChessPiece piece = chessBoard.getPiece(i, j);
                 if (piece != null && piece.getColor().equals("White")) {
-                    System.out.println("Piece: " + piece.getType(piece)+ " ");
+                    //System.out.println("Piece: " + piece.getType(piece)+ " ");
                     addLegalMovesForPiece(piece, i, j, allWhiteMoves, chessBoard);
                 }
             }
@@ -256,11 +258,9 @@ public class ChessAI {
         }
     }
     public void debugPrintAllLegalMoves(ChessBoard chessBoard) {
+        System.out.println("Printing all legal moves");
         List<Move> allLegalMoves = findAllLegalMoves(chessBoard, "Black");
         System.out.println("Total Num Legal moves for Black: " + allLegalMoves.size());
-        //for (Move move : allLegalMoves) {
-        //    System.out.println(move);
-        //}
     }
 }
 
