@@ -11,22 +11,16 @@ public class ChessAI {
 
 
     public List<Move> findAllLegalMoves(ChessBoard chessBoard, String color) {
-        ArrayList<Move> allBlackMoves = new ArrayList<>();
-
+        ArrayList<Move> allMoves = new ArrayList<>();
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 ChessPiece piece = chessBoard.getPiece(i, j);
-                if (piece != null  && piece.color.equals("Black")) {
-                    //System.out.println("before" + piece.getType(piece) + " ");
-                    System.out.println("Legal Move: " + piece.getType(piece) + " Row: " + i +" Col " + j);
-                    addLegalMovesForPiece(piece, i, j, allBlackMoves, chessBoard);
-                    //System.out.println("After");
+                if (piece != null  && piece.color.equals(color)) {
+                    addLegalMovesForPiece(piece, i, j, allMoves, chessBoard);
                 }
             }
         }
-        System.out.println("Found all legal moves");
-
-        return allBlackMoves;
+        return allMoves;
     }
 
     public List<Move> findAllLegalMovesForWhite(ChessBoard chessBoard) {
@@ -35,8 +29,11 @@ public class ChessAI {
             for (int j = 0; j < SIZE; j++) {
                 ChessPiece piece = chessBoard.getPiece(i, j);
                 if (piece != null && piece.getColor().equals("White")) {
-                    //System.out.println("Piece: " + piece.getType(piece)+ " ");
-                    addLegalMovesForPiece(piece, i, j, allWhiteMoves, chessBoard);
+
+                    ArrayList<Move> potentialMoves = new ArrayList<>();
+                    addLegalMovesForPiece(piece, i, j, potentialMoves, chessBoard);
+
+
                 }
             }
         }
@@ -240,7 +237,7 @@ public class ChessAI {
 
         //String pos = squareToLetter(initX, initY);
         String posF = squareToLetter(newX, newY);
-        System.out.println("New Position " + posF);
+        //System.out.println("New Position " + posF);
 
 
         ArrayList<Move> legalMovesPiece = new ArrayList<>();
@@ -266,7 +263,7 @@ public class ChessAI {
         }
     }
     public void debugPrintAllLegalMoves(ChessBoard chessBoard) {
-        System.out.println("Printing all legal moves");
+        //System.out.println("Printing all legal moves");
         List<Move> allLegalMoves = findAllLegalMoves(chessBoard, "Black");
         System.out.println("Total Num Legal moves for Black: " + allLegalMoves.size());
     }

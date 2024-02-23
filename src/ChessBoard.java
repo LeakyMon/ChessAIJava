@@ -2,10 +2,11 @@ import java.util.ArrayList;
 
 public class ChessBoard {
 
-
+    private final int SIZE = 8; // Standard ches
     private Position whiteKingPosition;
     private Position blackKingPosition;
     private ThreatState threatState = new ThreatState();
+
     private ChessPiece[][] board = new ChessPiece[8][8];
 
     public ChessBoard() {
@@ -55,6 +56,14 @@ public class ChessBoard {
         whiteKingPosition = new Position(7, 4); // Store white king's position
     }
 
+    public void setPiece(int sR, int sC, ChessPiece piece){
+        if (sR >= 0 && sR < SIZE && sC >= 0 && sC < SIZE) {
+            board[sR][sC] = piece;
+        } else {
+            System.out.println("Position out of bounds");
+        }
+    }
+
     public void movePiece(int startRow, int startCol, int endRow, int endCol) {
         ChessPiece pieceToMove = board[startRow][startCol]; // Get the piece to move
         //Keep track of king positions
@@ -88,6 +97,8 @@ public class ChessBoard {
 
     }
 
+
+
     public ThreatState getThreatState() {
         return threatState;
     }
@@ -96,9 +107,10 @@ public class ChessBoard {
 
         for (Move potentialMove : legalMovesPiece) {
             System.out.println("Evaluating move " + potentialMove);
-            System.out.println(getThreatState().isUnderThreat(potentialMove.toThreatState(potentialMove)));
+            //System.out.println(getThreatState().isUnderThreat(potentialMove.toThreatState(potentialMove)));
             if (getThreatState().isUnderThreat(potentialMove.toThreatState(potentialMove))){
-
+                System.out.println("Warning Piece in King Threat Zone!");
+                getThreatState().setKingMoveable(potentialMove.toThreatState(potentialMove),false);
             }
 
 

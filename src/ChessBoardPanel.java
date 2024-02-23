@@ -177,6 +177,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
                         //System.out.println("Checking for check/checkmate opponent color: " + " Black");
                         if (GameRules.isKingInCheck(chessBoard, "Black",  row,col)) {
                             JOptionPane.showMessageDialog(this, "Black" + " is in Check!");
+                            GameRules.isKingInCheckmate(selectedPiece,chessBoard,row,col);
                         }
                         pieceSelected = false;
                         selectedPiece = null;
@@ -229,6 +230,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
 
             if (GameRules.isKingInCheck(chessBoard, "White",r ,c)) {
                 JOptionPane.showMessageDialog(this, "White is in Check!" + chessBoard.getPiece(r,c));
+                GameRules.isKingInCheckmate(selectedPiece,chessBoard,r,c);
             }
             isWhiteTurn = true; // Switch back to player's turn
 

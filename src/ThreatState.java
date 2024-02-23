@@ -8,10 +8,12 @@ public class ThreatState {
 
 
     private Map<String, Boolean> threatMatrix;
+    private Map<String, Boolean> kingMoveable;
 
 
     public ThreatState() {
         this.threatMatrix = new HashMap<>();
+        this.kingMoveable = new HashMap<>();
         initializeThreatMatrix();
 
     }
@@ -23,6 +25,7 @@ public class ThreatState {
             for (int row = 1; row <= 8; row++) {
                 String key = "" + col + row; // Create the key, e.g., "A1"
                 threatMatrix.put(key, false); // Initialize with no threat
+                kingMoveable.put(key,true);
             }
         }
         setThreat("E1", true);
@@ -41,5 +44,8 @@ public class ThreatState {
     // Method to check if a square is under threat
     public boolean isUnderThreat(String square) {
         return threatMatrix.getOrDefault(square, false);
+    }
+    public void setKingMoveable(String square, boolean moveable){
+        kingMoveable.put(square,moveable);
     }
 }

@@ -10,38 +10,54 @@ public class GameRules {
 
 
     public static boolean isKingInCheck(ChessBoard chessBoard, String kingColor, int r, int c) {
-        System.out.println("Game Rules - isKingInCheck");
-
-        // Determine opponent's color
-        //String opponentColor = kingColor.equals("Black") ? "White" : "Black";
-        System.out.println("Is king in check: " + kingColor);
-
+        ChessAI chessAI = new ChessAI();
         Position kingPosition = chessBoard.getKingPosition(kingColor);
-        int kingRow = kingPosition.getRow();
-        int kingCol = kingPosition.getCol();
-        ChessPiece tempPiece = chessBoard.getPiece(r,c);
-        System.out.println("Row: "+ r + " Col: " + c + "KR: " + kingRow + " KingCol " + kingCol);
-        if (tempPiece.isValidMove(r,c,kingRow,kingCol,chessBoard.getBoard())){
-            System.out.println("King in check");
-            boolean temp = isKingInCheckmate(tempPiece,chessBoard, r, c);
-            return true;
+        // Assuming you have a method to get all opponent moves
+        List<Move> opponentMoves = chessAI.findAllLegalMoves(chessBoard, kingColor.equals("White") ? "Black" : "White");
+        for (Move move : opponentMoves) {
+            if (move.getNewX() == kingPosition.getRow() && move.getNewY() == kingPosition.getCol()) {
+                return true; // King is in check if any move can capture the king's position
+            }
         }
-        else {
-            System.out.println("Not in check");
-            return false; // The king is not in check
-        }
-
-
-
+        return false;
     }
 
     public static boolean isKingInCheckmate(ChessPiece chessPiece,ChessBoard chessBoard, int r, int c) {
-        ChessAI chessAI = new ChessAI();
         ArrayList<Move> allWhiteMoves = new ArrayList<>();
-        chessAI.addLegalMovesForPiece(chessPiece, r, c, allWhiteMoves, chessBoard);
+
+        ChessAI chessAI = new ChessAI();
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                ChessPiece piece = chessBoard.getPiece(i, j);
+                if (piece != null && piece.getColor().equals("White")) {
+
+                    ArrayList<Move> potentialMoves = new ArrayList<>();
+                    chessAI.addLegalMovesForPiece(piece, i, j, potentialMoves, chessBoard);
+
+                    for (Move move : potentialMoves) {
+                        // Simulate the move
+                        ChessPiece targetPiece = chessBoard.getPiece(move.getNewX(), move.getNewY());
+                        ChessPiece movingPiece = chessBoard.getPiece(i, j); // Save the moving piece
+
+                        // Check if the move resolves the check
+                        if (!isKingInCheck(chessBoard, "White", r, c)) {
+                            // If the move resolves the check, add it to the list of legal moves
+
+                            //allWhiteMoves.add(movingPiece);
+                            return false;
+                        }
+
+                        // Undo the move
+                        chessBoard.setPiece(i, j, movingPiece); // Move the piece back
+                        chessBoard.setPiece(move.getNewX(), move.getNewY(), targetPiece); // Res
+                    }
+                }
+            }
+        }
 
 
-        return false;
+        System.out.println("GAME OVER CHECKMATE");
+        return true;
     }
 
 }
