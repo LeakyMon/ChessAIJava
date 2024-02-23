@@ -31,6 +31,8 @@ public class King extends ChessPiece{
             }
         }
 
+
+
         // The move is valid (either moving to an empty square or capturing an opponent's piece)
         return true;
 

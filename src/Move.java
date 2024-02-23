@@ -45,6 +45,10 @@ public class Move {
         return "" + colLetter + rowNumber;
     }
 
+    public String toThreatState(Move move){
+        return toBoardCoordinate(endX, endY);
+    }
+
     public boolean capturesOpponentPiece(int x, int y, ChessBoard chessBoard) {
 
 

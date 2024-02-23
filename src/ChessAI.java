@@ -18,6 +18,7 @@ public class ChessAI {
                 ChessPiece piece = chessBoard.getPiece(i, j);
                 if (piece != null  && piece.color.equals("Black")) {
                     //System.out.println("before" + piece.getType(piece) + " ");
+                    System.out.println("Legal Move: " + piece.getType(piece) + " Row: " + i +" Col " + j);
                     addLegalMovesForPiece(piece, i, j, allBlackMoves, chessBoard);
                     //System.out.println("After");
                 }
@@ -43,7 +44,7 @@ public class ChessAI {
     }
 
 
-    private void addLegalMovesForPiece(ChessPiece piece, int row, int col, List<Move> allMoves, ChessBoard chessBoard) {
+    public void addLegalMovesForPiece(ChessPiece piece, int row, int col, List<Move> allMoves, ChessBoard chessBoard) {
         // Example for a Pawn
         if (piece instanceof Pawn) {
             // Consider moving forward one and two squares, and capturing moves
@@ -234,13 +235,20 @@ public class ChessAI {
             System.out.println(movingPiece.getType(movingPiece) + " " + movingPiece.getColor() + " captures " + targetPiece.getType(targetPiece) + " at " + move.toBoardCoordinate(newX,newY));
         }
 
-
         // Update the board with the move
         chessBoard.movePiece(initX, initY, newX, newY);
 
-     // if (GameRules.isKingInCheck(chessBoard, "White", newX,newY)) {
-            //JOptionPane.showMessageDialog(this, movingPiece.getColor() + " is in Check!");
-       // }
+        //String pos = squareToLetter(initX, initY);
+        String posF = squareToLetter(newX, newY);
+        System.out.println("New Position " + posF);
+
+
+        ArrayList<Move> legalMovesPiece = new ArrayList<>();
+        addLegalMovesForPiece(movingPiece,newX,newY,legalMovesPiece,chessBoard);
+        System.out.println("Checking threat State for  "+ movingPiece.getType(movingPiece));
+        chessBoard.checkThreatState(legalMovesPiece,chessBoard);
+     //CHECK THREAT STATE
+
 
     }
 
@@ -261,6 +269,13 @@ public class ChessAI {
         System.out.println("Printing all legal moves");
         List<Move> allLegalMoves = findAllLegalMoves(chessBoard, "Black");
         System.out.println("Total Num Legal moves for Black: " + allLegalMoves.size());
+    }
+
+    public String squareToLetter(int col, int row) {
+
+        String columnLetter = String.valueOf((char)('A' + col));
+        int chessRow = 8 - row; // Convert array row index to chess row number
+        return columnLetter + chessRow;
     }
 }
 

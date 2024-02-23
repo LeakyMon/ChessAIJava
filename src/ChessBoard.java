@@ -1,10 +1,11 @@
+import java.util.ArrayList;
 
 public class ChessBoard {
 
 
     private Position whiteKingPosition;
     private Position blackKingPosition;
-
+    private ThreatState threatState = new ThreatState();
     private ChessPiece[][] board = new ChessPiece[8][8];
 
     public ChessBoard() {
@@ -83,5 +84,32 @@ public class ChessBoard {
         return "White".equals(color) ? whiteKingPosition : blackKingPosition;
     }
 
+    public void updateThreatState(){
 
+    }
+
+    public ThreatState getThreatState() {
+        return threatState;
+    }
+
+    public ThreatState checkThreatState(ArrayList<Move> legalMovesPiece, ChessBoard chessBoard){
+
+        for (Move potentialMove : legalMovesPiece) {
+            System.out.println("Evaluating move " + potentialMove);
+            System.out.println(getThreatState().isUnderThreat(potentialMove.toThreatState(potentialMove)));
+            if (getThreatState().isUnderThreat(potentialMove.toThreatState(potentialMove))){
+
+            }
+
+
+        }
+
+        return null;
+    }
+    public String squareToLetter(int col, int row) {
+
+        String columnLetter = String.valueOf((char)('A' + col));
+        int chessRow = 8 - row; // Convert array row index to chess row number
+        return columnLetter + chessRow;
+    }
 }

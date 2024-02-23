@@ -7,6 +7,8 @@ public class GameRules {
     private static final int SIZE = 8;
     private static final int SQUARE_SIZE = 60;
 
+
+
     public static boolean isKingInCheck(ChessBoard chessBoard, String kingColor, int r, int c) {
         System.out.println("Game Rules - isKingInCheck");
 
@@ -21,6 +23,7 @@ public class GameRules {
         System.out.println("Row: "+ r + " Col: " + c + "KR: " + kingRow + " KingCol " + kingCol);
         if (tempPiece.isValidMove(r,c,kingRow,kingCol,chessBoard.getBoard())){
             System.out.println("King in check");
+            boolean temp = isKingInCheckmate(tempPiece,chessBoard, r, c);
             return true;
         }
         else {
@@ -32,7 +35,10 @@ public class GameRules {
 
     }
 
-    public static boolean isKingInCheckmate(ChessBoard chessBoard, String kingColor, ChessAI chessAI) {
+    public static boolean isKingInCheckmate(ChessPiece chessPiece,ChessBoard chessBoard, int r, int c) {
+        ChessAI chessAI = new ChessAI();
+        ArrayList<Move> allWhiteMoves = new ArrayList<>();
+        chessAI.addLegalMovesForPiece(chessPiece, r, c, allWhiteMoves, chessBoard);
 
 
         return false;

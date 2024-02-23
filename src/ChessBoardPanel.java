@@ -21,10 +21,11 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
     private boolean isWhiteTurn = true;
     private ChessAI chessAI;
     private Position position;
+    private ThreatState threatState;
 
     public ChessBoardPanel(ChessAI chessAI) {
         chessBoard = new ChessBoard();
-
+        threatState = new ThreatState();
         loadImages();
         addMouseListener(this);
         this.chessAI = chessAI;
@@ -174,10 +175,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
                         chessBoard.movePiece(selectedRow, selectedCol, row, col);
 
                         //System.out.println("Checking for check/checkmate opponent color: " + " Black");
-                        if (GameRules.isKingInCheckmate(chessBoard, "Black", chessAI)) {
-                            JOptionPane.showMessageDialog(this, "Black" + " is in Checkmate!");
-                            // Additional logic to handle the end of the game
-                        } else if (GameRules.isKingInCheck(chessBoard, "Black",  row,col)) {
+                        if (GameRules.isKingInCheck(chessBoard, "Black",  row,col)) {
                             JOptionPane.showMessageDialog(this, "Black" + " is in Check!");
                         }
                         pieceSelected = false;
@@ -245,18 +243,11 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
 
     private void checkGameState(String opponentColor) {
         System.out.println("Checking for check/checkmate opponent color: " + opponentColor);
-        if (GameRules.isKingInCheckmate(chessBoard, opponentColor, chessAI)) {
-            JOptionPane.showMessageDialog(this, opponentColor + " is in Checkmate!");
-            // Additional logic to handle the end of the game
-        }// else if (GameRules.isKingInCheck(chessBoard, opponentColor, chessAI)) {
+
      //       JOptionPane.showMessageDialog(this, opponentColor + " is in Check!");
       //  }
     }
-    private boolean isGameOver(ChessBoard chessBoard) {
-        // Check for checkmate for both colors
-        return GameRules.isKingInCheckmate(chessBoard, "White", chessAI) ||
-                GameRules.isKingInCheckmate(chessBoard, "Black", chessAI);
-    }
+
     public void resetGame() {
         // Reset the chess board to its initial state
         chessBoard.initializeBoard();
