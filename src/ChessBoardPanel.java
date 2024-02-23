@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 //CONNECTIONS ChessGame, ChessPiece, Player
 
@@ -177,7 +178,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
                         //System.out.println("Checking for check/checkmate opponent color: " + " Black");
                         if (GameRules.isKingInCheck(chessBoard, "Black",  row,col)) {
                             JOptionPane.showMessageDialog(this, "Black" + " is in Check!");
-                            GameRules.isKingInCheckmate(selectedPiece,chessBoard,row,col);
+                           // GameRules.isKingInCheckmate(selectedPiece,chessBoard,row,col, );
                         }
                         pieceSelected = false;
                         selectedPiece = null;
@@ -221,16 +222,27 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         System.out.println("\n-------BLACK's TURN-------\n");
         if (!isWhiteTurn) {
             Move tempMove = chessAI.makeMove(chessBoard);
+            //Move tempMove = chessAI.;
             int r,c;
             r = tempMove.getNewX();
             c = tempMove.getNewY();
             chessAI.executeMove(tempMove, chessBoard);
 
-            chessAI.debugPrintAllLegalMoves(chessBoard);
+            List<Move> movesList = chessAI.returnAllLegalMoves(chessBoard);
+            ChessPiece tempPiece = chessBoard.getPiece(r,c);
 
             if (GameRules.isKingInCheck(chessBoard, "White",r ,c)) {
                 JOptionPane.showMessageDialog(this, "White is in Check!" + chessBoard.getPiece(r,c));
-                GameRules.isKingInCheckmate(selectedPiece,chessBoard,r,c);
+                System.out.println("Opponent Piece: " + tempMove);
+                if (GameRules.isKingInCheckmate(tempPiece,chessBoard,r,c, movesList)){
+                    JOptionPane.showMessageDialog(null, "WHITE" + " is in checkmate. Game over.");
+                    int playAgain = JOptionPane.showConfirmDialog(null, "Play again?", "Game Over", JOptionPane.YES_NO_OPTION);
+                    if (playAgain == JOptionPane.YES_OPTION) {
+                        resetGame();
+                    } else {
+                        System.exit(0); // or close the game window
+                    }
+                }
             }
             isWhiteTurn = true; // Switch back to player's turn
 
@@ -253,8 +265,6 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
     public void resetGame() {
         // Reset the chess board to its initial state
         chessBoard.initializeBoard();
-
-
         // Reset any other state variables, like whose turn it is
         isWhiteTurn = true;
         selectedPiece = null;

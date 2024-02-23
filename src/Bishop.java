@@ -3,6 +3,47 @@ public class Bishop extends ChessPiece{
         super(type,color,3);
     }
 
+
+    public boolean isMoveValidWithoutChangingState(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board){
+        int rowDiff = Math.abs(endRow - startRow);
+        int colDiff = Math.abs(endCol - startCol);
+
+        // Ensure the move is strictly diagonal
+        if (rowDiff != colDiff) {
+            return false; // Not a diagonal move
+        }
+
+        // Determine the direction of movement
+        int rowDirection = (endRow > startRow) ? 1 : -1;
+        int colDirection = (endCol > startCol) ? 1 : -1;
+
+        // Check for obstacles in the diagonal path
+        for (int i = 1; i < rowDiff; i++) {
+            int intermediateRow = startRow + i * rowDirection;
+            int intermediateCol = startCol + i * colDirection;
+
+            // Obstacle check
+            if (board[intermediateRow][intermediateCol] != null) {
+                return false; // Path is blocked by another piece
+            }
+        }
+
+        // The destination square is either empty or occupied by an opponent's piece
+        ChessPiece destinationPiece = board[endRow][endCol];
+        if (destinationPiece != null) {
+            if (!destinationPiece.getColor().equals(this.color)) {
+                // Capturing an opponent's piece is a valid move
+                return true;
+            } else {
+                // Cannot capture own piece
+                return false;
+            }
+        }
+
+        // If the destination square is empty, it's a valid move
+        return true;
+    }
+
     public boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board) {
 
         int rowDiff = Math.abs(endRow - startRow);

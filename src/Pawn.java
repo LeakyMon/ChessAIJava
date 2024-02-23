@@ -1,10 +1,32 @@
 public class Pawn extends ChessPiece {
 
-
     public Pawn(String type, String color) {
         super(type, color, 1);
     }
 
+    public boolean isMoveValidWithoutChangingState(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board) {
+        ChessPiece pawn = board[startRow][startCol];
+        int direction = this.color.equals("White") ? -1 : 1; // Direction based on color
+
+        // Check for normal move
+        if (startCol == endCol && board[endRow][endCol] == null) {
+            if (!pawn.getHasMoved(pawn) && (endRow - startRow) == 2 * direction) {
+                return true; // Double step on first move
+            } else if ((endRow - startRow) == direction) {
+                return true; // Single step forward
+            }
+        }
+
+        // Check for capture move
+        if (Math.abs(startCol - endCol) == 1 && (endRow - startRow) == direction) {
+            if (board[endRow][endCol] != null && !board[endRow][endCol].getColor().equals(pawn.color)) {
+                return true; // Capturing diagonally
+            }
+        }
+
+        return false; // If none of the conditions are met, it's an invalid move
+
+    }
     @Override
     public boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board) {
 
@@ -42,4 +64,6 @@ public class Pawn extends ChessPiece {
 
         //return false;
     }
+
+
 }

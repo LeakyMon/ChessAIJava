@@ -12,15 +12,33 @@ public class ChessAI {
 
     public List<Move> findAllLegalMoves(ChessBoard chessBoard, String color) {
         ArrayList<Move> allMoves = new ArrayList<>();
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                ChessPiece piece = chessBoard.getPiece(i, j);
-                if (piece != null  && piece.color.equals(color)) {
-                    addLegalMovesForPiece(piece, i, j, allMoves, chessBoard);
+        if (Objects.equals(color, "White")){
+
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    ChessPiece piece = chessBoard.getPiece(i, j);
+                    if (piece != null && piece.getColor().equals("White")) {
+                        ArrayList<Move> potentialMoves = new ArrayList<>();
+                        addLegalMovesForPiece(piece, i, j, potentialMoves, chessBoard);
+                    }
                 }
             }
+            return allMoves;
         }
-        return allMoves;
+        else {
+
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    ChessPiece piece = chessBoard.getPiece(i, j);
+                    if (piece != null  && piece.color.equals(color)) {
+                        addLegalMovesForPiece(piece, i, j, allMoves, chessBoard);
+                    }
+                }
+            }
+            return allMoves;
+        }
+
+
     }
 
     public List<Move> findAllLegalMovesForWhite(ChessBoard chessBoard) {
@@ -39,6 +57,7 @@ public class ChessAI {
         }
         return allWhiteMoves;
     }
+
 
 
     public void addLegalMovesForPiece(ChessPiece piece, int row, int col, List<Move> allMoves, ChessBoard chessBoard) {
@@ -187,7 +206,11 @@ public class ChessAI {
         // Add similar logic for other types of pieces (Rooks, Knights, etc.)
     }
 
-    private Move selectBestMove(List<Move> moves, ChessBoard chessBoard) {
+    public void isValidForSinglePiece(ChessPiece piece, int r, int c,ChessBoard chessBoard){
+
+    }
+
+    public Move selectBestMove(List<Move> moves, ChessBoard chessBoard) {
         Move bestMove = null;
         int highestScore = 0;
 
@@ -254,7 +277,7 @@ public class ChessAI {
         List<Move> possibleMoves = findAllLegalMoves(chessBoard, "Black");
         if (!possibleMoves.isEmpty()) {
             return selectBestMove(possibleMoves, chessBoard);
-
+//
         } else {
             System.out.println("No legal moves found");
             // No legal moves found - could be stalemate or checkmate
@@ -262,10 +285,10 @@ public class ChessAI {
             return null;
         }
     }
-    public void debugPrintAllLegalMoves(ChessBoard chessBoard) {
+    public List<Move> returnAllLegalMoves(ChessBoard chessBoard) {
         //System.out.println("Printing all legal moves");
-        List<Move> allLegalMoves = findAllLegalMoves(chessBoard, "Black");
-        System.out.println("Total Num Legal moves for Black: " + allLegalMoves.size());
+        //System.out.println("Total Num Legal moves for Black: " + allLegalMoves.size());
+        return findAllLegalMoves(chessBoard, "Black");
     }
 
     public String squareToLetter(int col, int row) {

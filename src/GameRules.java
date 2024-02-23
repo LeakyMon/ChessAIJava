@@ -10,6 +10,7 @@ public class GameRules {
 
 
     public static boolean isKingInCheck(ChessBoard chessBoard, String kingColor, int r, int c) {
+        System.out.println("is King in Check " + kingColor);
         ChessAI chessAI = new ChessAI();
         Position kingPosition = chessBoard.getKingPosition(kingColor);
         // Assuming you have a method to get all opponent moves
@@ -22,10 +23,11 @@ public class GameRules {
         return false;
     }
 
-    public static boolean isKingInCheckmate(ChessPiece chessPiece,ChessBoard chessBoard, int r, int c) {
+    public static boolean isKingInCheckmate(ChessPiece chessPiece,ChessBoard chessBoard, int r, int c, List<Move> allBlackMoves) {
         ArrayList<Move> allWhiteMoves = new ArrayList<>();
-
+        ArrayList<Move> allAttackerMoves = new ArrayList<>();
         ChessAI chessAI = new ChessAI();
+        Position position = chessBoard.getKingPosition("White");
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 ChessPiece piece = chessBoard.getPiece(i, j);
@@ -33,27 +35,47 @@ public class GameRules {
 
                     ArrayList<Move> potentialMoves = new ArrayList<>();
                     chessAI.addLegalMovesForPiece(piece, i, j, potentialMoves, chessBoard);
-
+                    boolean isSafe = true;
                     for (Move move : potentialMoves) {
                         // Simulate the move
                         ChessPiece targetPiece = chessBoard.getPiece(move.getNewX(), move.getNewY());
                         ChessPiece movingPiece = chessBoard.getPiece(i, j); // Save the moving piece
 
-                        // Check if the move resolves the check
-                        if (!isKingInCheck(chessBoard, "White", r, c)) {
-                            // If the move resolves the check, add it to the list of legal moves
+                        if (movingPiece.isMoveValidWithoutChangingState(i, j, move.getNewX(), move.getNewY(), chessBoard.getBoard())) {
+                            // If the move is valid, simulate it to see if it resolves the check
+                            chessBoard.simulateMove(i, j, move.getNewX(), move.getNewY());
+                            if (chessPiece.isMoveValidWithoutChangingState(r, c, move.getNewX(), move.getNewX(), chessBoard.getBoard())) {
+                                //IF THE OPPONENT CAN STILL REACH THE KING
 
-                            //allWhiteMoves.add(movingPiece);
-                            return false;
+                                isSafe = false;
+
+                            } else {
+
+                                Position pos = chessBoard.getKingPosition("White");
+                                for (Move blackMove : allBlackMoves){
+                                    if (blackMove.getNewX() == pos.getRow() && blackMove.getNewY() == pos.getCol()) {
+                                        // If any black move can capture the king, the move doesn't resolve the check
+                                        isSafe = false;
+                                        break;
+                                    }
+                                }
+                            }
+                            chessBoard.undoSimulatedMove(i, j, move.getNewX(), move.getNewY(), movingPiece, targetPiece);
+                            if (isSafe) {
+                                // If we found a move that keeps the king safe from all of black's responses, it's not a checkmate
+                                return false;
+                            }
+
+
                         }
-
-                        // Undo the move
-                        chessBoard.setPiece(i, j, movingPiece); // Move the piece back
-                        chessBoard.setPiece(move.getNewX(), move.getNewY(), targetPiece); // Res
+                        else {
+                            isSafe = false;
+                        }
                     }
                 }
             }
         }
+
 
 
         System.out.println("GAME OVER CHECKMATE");

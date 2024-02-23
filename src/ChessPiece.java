@@ -38,6 +38,6 @@ public abstract class ChessPiece {
     }
     // Abstract method for validating moves, to be implemented in subclasses
     public abstract boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board);
-
+    public abstract boolean isMoveValidWithoutChangingState(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board);
 
 }

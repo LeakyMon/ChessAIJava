@@ -5,6 +5,37 @@ public class King extends ChessPiece{
         super(type,color, 10);
     }
 
+    public boolean isMoveValidWithoutChangingState(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board){
+
+        int rowDiff = Math.abs(endRow - startRow);
+        int colDiff = Math.abs(endCol - startCol);
+        // King cannot move more than one square away in any direction
+        if (rowDiff > 1 || colDiff > 1) {
+            return false;
+        }
+
+        // Ensure the destination square is within the board bounds
+        if (endRow < 0 || endRow >= board.length || endCol < 0 || endCol >= board[0].length) {
+            return false; // Destination is outside the board
+        }
+
+        // Check if the destination square is occupied
+        ChessPiece destinationPiece = board[endRow][endCol];
+        ChessPiece currPiece = board[startRow][startCol];
+        if (destinationPiece != null) {
+            // If the destination square is occupied by a piece of the same color, it's not a valid move
+            if (destinationPiece.getColor().equals(currPiece.getColor())) {
+                return false;
+            }
+        }
+
+        // Optionally, check for checks. However, this requires knowing all potential threats on the board,
+        // which might not be straightforward without simulating the move.
+
+        // The move is valid (either moving to an empty square or capturing an opponent's piece)
+        return true;
+    }
+
     public boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board) {
 
         int rowDiff = Math.abs(endRow - startRow);

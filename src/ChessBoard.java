@@ -118,10 +118,18 @@ public class ChessBoard {
 
         return null;
     }
-    public String squareToLetter(int col, int row) {
+    public void simulateMove(int startRow, int startCol, int endRow, int endCol) {
+        ChessPiece movingPiece = this.board[startRow][startCol];
+        if (movingPiece.getType(movingPiece).equals("King")){
+            setKingPosition(movingPiece.color, endRow,endCol);
+        }
+        this.board[startRow][startCol] = null; // Remove the piece from the starting square
+        this.board[endRow][endCol] = movingPiece; // Place it on the destination square
+    }
 
-        String columnLetter = String.valueOf((char)('A' + col));
-        int chessRow = 8 - row; // Convert array row index to chess row number
-        return columnLetter + chessRow;
+    // Method to undo a simulated move
+    public void undoSimulatedMove(int startRow, int startCol, int endRow, int endCol, ChessPiece originalPiece, ChessPiece capturedPiece) {
+        this.board[startRow][startCol] = originalPiece; // Restore the original piece to its starting square
+        this.board[endRow][endCol] = capturedPiece; // Restore the captured piece, if any, to the destination square
     }
 }

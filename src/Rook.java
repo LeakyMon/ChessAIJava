@@ -3,6 +3,48 @@ public class Rook extends ChessPiece{
         super(type, color, 5);
     }
 
+    public boolean isMoveValidWithoutChangingState(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board){
+
+        boolean isVerticalMove = startCol == endCol;
+        boolean isHorizontalMove = startRow == endRow;
+
+        if (!isVerticalMove && !isHorizontalMove) {
+            return false; // Move is neither vertical nor horizontal
+        }
+
+        // Determine the direction of the move and set up for iteration
+        int rowDirection = Integer.compare(endRow, startRow); // 0 if no change, -1 for up, 1 for down
+        int colDirection = Integer.compare(endCol, startCol); // 0 if no change, -1 for left, 1 for right
+
+        // Check for obstacles along the path
+        int currentRow = startRow + rowDirection;
+        int currentCol = startCol + colDirection;
+        while (currentRow != endRow || currentCol != endCol) {
+            if (board[currentRow][currentCol] != null) {
+                return false; // Path is blocked
+            }
+            currentRow += rowDirection;
+            currentCol += colDirection;
+        }
+
+        // At the destination square
+        ChessPiece destinationPiece = board[endRow][endCol];
+        if (destinationPiece != null) {
+            ChessPiece movingPiece = board[startRow][startCol];
+            if (destinationPiece.getColor().equals(movingPiece.getColor())) {
+                return false; // Cannot capture your own piece
+            } else {
+                // Capturing an opponent's piece
+                System.out.println("Rook: Enemy " + destinationPiece.getType(destinationPiece) + " captured");
+                return true;
+            }
+        }
+
+        return true; // The move is valid if it's clear or captures an opponent'
+
+
+    }
+
     @Override
     public boolean isValidMove(int startRow, int startCol, int endRow, int endCol, ChessPiece[][] board) {
 
