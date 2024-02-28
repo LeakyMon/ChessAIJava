@@ -7,8 +7,11 @@ import java.util.Objects;
 public class ChessAI {
     private static final int SIZE = 8;
     private static final int SQUARE_SIZE = 60;
+    private boolean inCheck = false;
 
-
+    public void setInCheck(boolean c){
+        this.inCheck = c;
+    }
 
     public List<Move> findAllLegalMoves(ChessBoard chessBoard, String color) {
             ArrayList<Move> allMoves = new ArrayList<>();
@@ -180,7 +183,7 @@ public class ChessAI {
                         // If the destination is empty or contains an opponent's piece, add the move
                         if (chessBoard.getPiece(newRow, newCol) == null ||
                                 !chessBoard.getPiece(newRow, newCol).getColor().equals(piece.getColor())) {
-                            allMoves.add(new Move(piece, col, row, newCol, newRow));
+                            allMoves.add(new Move(piece, row, col, newRow, newCol));
                         }
                     }
                 }
@@ -248,18 +251,47 @@ public class ChessAI {
     }
 
     public Move makeMove(ChessBoard chessBoard) {
-
         List<Move> possibleMoves = findAllLegalMoves(chessBoard, "Black");
-        if (!possibleMoves.isEmpty()) {
-            return selectBestMove(possibleMoves, chessBoard);
-//
-        } else {
-            System.out.println("No legal moves found");
-            // No legal moves found - could be stalemate or checkmate
-            // Add logic here to handle endgame conditions
-            return null;
+
+        if (!inCheck){
+
+            if (!possibleMoves.isEmpty()) {
+                return selectBestMove(possibleMoves, chessBoard);
+
+            } else {
+                System.out.println("No legal moves found");
+                // No legal moves found - could be stalemate or checkmate
+                // Add logic here to handle endgame conditions
+                return null;
+            }
         }
-    }
+        else {
+            System.out.println("Checking");
+            List<Move> escapeMoves = new ArrayList<>();
+            for (Move move : possibleMoves) {
+                // Simulate each move
+                ChessPiece targetPiece = chessBoard.getPiece(move.getNewY(), move.getNewX());
+                ChessPiece movingPiece = chessBoard.getPiece(move.getInitY(), move.getInitX()); // Save the moving piece
+                chessBoard.simulateMove(move.getInitY(),move.getInitX(), move.getNewY(),move.getNewX());
+                if (!GameRules.isKingInCheck(chessBoard, "Black")) {
+                    escapeMoves.add(move);
+                }
+                chessBoard.undoSimulatedMove(move.getInitY(),move.getInitX(), move.getNewY(),move.getNewX(),movingPiece, targetPiece);
+                // Undo the move or reset the board to its original state
+            }
+            if (!escapeMoves.isEmpty()) {
+                return selectBestMove(escapeMoves, chessBoard);
+            } else {
+                System.out.println("No moves to escape check - checkmate");
+                // Handle checkmate
+                System.out.println("checkmate");
+                return null;
+            }
+        }
+
+        }
+
+
 
     public List<Move> returnAllLegalMoves(ChessBoard chessBoard) {
 

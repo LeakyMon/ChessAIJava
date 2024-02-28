@@ -7,7 +7,7 @@ public class GameRules {
     private static final int SIZE = 8;
     private static final int SQUARE_SIZE = 60;
 
-    public static boolean isKingInCheck(ChessBoard chessBoard, String kingColor, int r, int c) {
+    public static boolean isKingInCheck(ChessBoard chessBoard, String kingColor) {
         System.out.println("is King in Check " + kingColor);
         ChessAI chessAI = new ChessAI();
         Position kingPosition = chessBoard.getKingPosition(kingColor);

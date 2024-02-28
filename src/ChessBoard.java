@@ -136,6 +136,8 @@ public class ChessBoard {
 
      */
     public void simulateMove(int startRow, int startCol, int endRow, int endCol) {
+        System.out.println("Simulating SR: " + startRow + " SC " + startCol);
+        System.out.println();
         ChessPiece movingPiece = this.board[startRow][startCol];
         if (movingPiece.getType(movingPiece).equals("King")){
             setKingPosition(movingPiece.color, endRow,endCol);
@@ -148,5 +150,8 @@ public class ChessBoard {
     public void undoSimulatedMove(int startRow, int startCol, int endRow, int endCol, ChessPiece originalPiece, ChessPiece capturedPiece) {
         this.board[startRow][startCol] = originalPiece; // Restore the original piece to its starting square
         this.board[endRow][endCol] = capturedPiece; // Restore the captured piece, if any, to the destination square
+        if (originalPiece.getType(originalPiece).equals("King")){
+            setKingPosition(originalPiece.color, startRow,startCol);
+        }
     }
 }
