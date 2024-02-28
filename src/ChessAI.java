@@ -11,26 +11,11 @@ public class ChessAI {
 
 
     public List<Move> findAllLegalMoves(ChessBoard chessBoard, String color) {
-        ArrayList<Move> allMoves = new ArrayList<>();
-        if (Objects.equals(color, "White")){
-
+            ArrayList<Move> allMoves = new ArrayList<>();
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     ChessPiece piece = chessBoard.getPiece(i, j);
-                    if (piece != null && piece.getColor().equals("White")) {
-                        ArrayList<Move> potentialMoves = new ArrayList<>();
-                        addLegalMovesForPiece(piece, i, j, potentialMoves, chessBoard);
-                    }
-                }
-            }
-            return allMoves;
-        }
-        else {
-
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    ChessPiece piece = chessBoard.getPiece(i, j);
-                    if (piece != null  && piece.color.equals(color)) {
+                    if (piece != null && piece.getColor().equals(color)) {
                         addLegalMovesForPiece(piece, i, j, allMoves, chessBoard);
                     }
                 }
@@ -39,7 +24,6 @@ public class ChessAI {
         }
 
 
-    }
 
     public List<Move> findAllLegalMovesForWhite(ChessBoard chessBoard) {
         ArrayList<Move> allWhiteMoves = new ArrayList<>();
@@ -196,7 +180,7 @@ public class ChessAI {
                         // If the destination is empty or contains an opponent's piece, add the move
                         if (chessBoard.getPiece(newRow, newCol) == null ||
                                 !chessBoard.getPiece(newRow, newCol).getColor().equals(piece.getColor())) {
-                            allMoves.add(new Move(piece, row, col, newRow, newCol));
+                            allMoves.add(new Move(piece, col, row, newCol, newRow));
                         }
                     }
                 }
@@ -216,8 +200,8 @@ public class ChessAI {
 
         for (Move move : moves) {
             if (move.capturesOpponentPiece(move.getNewX(), move.getNewY(), chessBoard)) {
-                ChessPiece targetPiece = chessBoard.getPiece(move.getNewX(), move.getNewY());
-                ChessPiece movingPiece = chessBoard.getPiece(move.getInitX(), move.getInitY());
+                ChessPiece targetPiece = chessBoard.getPiece(move.getNewY(), move.getNewX());
+                ChessPiece movingPiece = chessBoard.getPiece(move.getInitY(), move.getInitX());
 
                 if (targetPiece != null && !targetPiece.getColor().equals(movingPiece.getColor())) {
                     int score = targetPiece.getScore();
@@ -246,29 +230,20 @@ public class ChessAI {
         int newX = move.getNewX();
         int newY = move.getNewY();
 
-        ChessPiece targetPiece = chessBoard.getPiece(newX, newY);
-        ChessPiece movingPiece = chessBoard.getPiece(initX, initY);
+        ChessPiece targetSquare = chessBoard.getPiece(newY, newX);
+        ChessPiece currentSquare = chessBoard.getPiece(initY, initX);
 
         // Check if the target square has an opponent's piece
 
-        if (targetPiece != null && !targetPiece.getColor().equals(movingPiece.getColor())) {
-            System.out.println(movingPiece.getType(movingPiece) + " " + movingPiece.getColor() + " captures " + targetPiece.getType(targetPiece) + " at " + move.toBoardCoordinate(newX,newY));
+        if (targetSquare != null && !targetSquare.getColor().equals(currentSquare.getColor())) {
+            System.out.println(currentSquare.getType(currentSquare) + " " + currentSquare.getColor() + " captures " + targetSquare.getType(targetSquare) + " at " + move.toBoardCoordinate(newX,newY));
         }
 
         // Update the board with the move
-        chessBoard.movePiece(initX, initY, newX, newY);
+        chessBoard.movePiece(initY, initX, newY, newX);
 
         //String pos = squareToLetter(initX, initY);
-        String posF = squareToLetter(newX, newY);
-        //System.out.println("New Position " + posF);
-
-
-        ArrayList<Move> legalMovesPiece = new ArrayList<>();
-        addLegalMovesForPiece(movingPiece,newX,newY,legalMovesPiece,chessBoard);
-        System.out.println("Checking threat State for  "+ movingPiece.getType(movingPiece));
-        chessBoard.checkThreatState(legalMovesPiece,chessBoard);
-     //CHECK THREAT STATE
-
+        String posF = squareToLetter(newY, newX);
 
     }
 
@@ -285,9 +260,9 @@ public class ChessAI {
             return null;
         }
     }
+
     public List<Move> returnAllLegalMoves(ChessBoard chessBoard) {
-        //System.out.println("Printing all legal moves");
-        //System.out.println("Total Num Legal moves for Black: " + allLegalMoves.size());
+
         return findAllLegalMoves(chessBoard, "Black");
     }
 

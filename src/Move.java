@@ -11,12 +11,13 @@ public class Move {
 
     private ChessPiece piece; // Add a reference to the chess piece
 
-    public Move(ChessPiece piece, int startX, int startY, int endX, int endY) {
+    public Move(ChessPiece piece, int startY, int startX, int endY, int endX) {
         // ... initialization
-        this.startX = startX;
         this.startY= startY;
-        this.endX = endX;
+        this.startX = startX;
         this.endY = endY;
+        this.endX = endX;
+
         this.piece = piece;
     }
     public int getInitX(){
@@ -46,7 +47,7 @@ public class Move {
     }
 
     public String toThreatState(Move move){
-        return toBoardCoordinate(endX, endY);
+        return toBoardCoordinate(move.endY, move.endX);
     }
 
     public boolean capturesOpponentPiece(int x, int y, ChessBoard chessBoard) {

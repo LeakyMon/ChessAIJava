@@ -28,12 +28,6 @@ public class ThreatState {
                 kingMoveable.put(key,true);
             }
         }
-       // setThreat("E1", true);
-        //setThreat("E2", true);
-       // setThreat("D1", true);
-       // setThreat("D2", true);
-       // setThreat("F1", true);
-       // setThreat("F2", true);
     }
 
     // Method to update the threat status of a square

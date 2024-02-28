@@ -29,10 +29,7 @@ public class King extends ChessPiece{
             }
         }
 
-        // Optionally, check for checks. However, this requires knowing all potential threats on the board,
-        // which might not be straightforward without simulating the move.
 
-        // The move is valid (either moving to an empty square or capturing an opponent's piece)
         return true;
     }
 

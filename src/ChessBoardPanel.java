@@ -78,8 +78,6 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         }
     }
 
-
-
     private void drawBoard(Graphics g) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -106,7 +104,6 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
             }
         }
     }
-
 
     private Image getPieceImage(ChessPiece piece) {
         //White pawn
@@ -224,8 +221,10 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
             Move tempMove = chessAI.makeMove(chessBoard);
             //Move tempMove = chessAI.;
             int r,c;
-            r = tempMove.getNewX();
-            c = tempMove.getNewY();
+            c = tempMove.getNewX();
+            r = tempMove.getNewY();
+
+            //Move the black piece
             chessAI.executeMove(tempMove, chessBoard);
 
             List<Move> movesList = chessAI.returnAllLegalMoves(chessBoard);
@@ -234,7 +233,7 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
             if (GameRules.isKingInCheck(chessBoard, "White",r ,c)) {
                 JOptionPane.showMessageDialog(this, "White is in Check!" + chessBoard.getPiece(r,c));
                 System.out.println("Opponent Piece: " + tempMove);
-                if (GameRules.isKingInCheckmate(tempPiece,chessBoard,r,c, movesList)){
+               if (GameRules.isKingInCheckmate(tempPiece,chessBoard,r,c, movesList)){
                     JOptionPane.showMessageDialog(null, "WHITE" + " is in checkmate. Game over.");
                     int playAgain = JOptionPane.showConfirmDialog(null, "Play again?", "Game Over", JOptionPane.YES_NO_OPTION);
                     if (playAgain == JOptionPane.YES_OPTION) {
@@ -254,7 +253,6 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         }
     }
 
-
     private void checkGameState(String opponentColor) {
         System.out.println("Checking for check/checkmate opponent color: " + opponentColor);
 
@@ -271,8 +269,6 @@ public class ChessBoardPanel extends JPanel implements MouseListener {
         pieceSelected = false;
         repaint();
     }
-
-
 
     // Other required methods of MouseListener (empty implementations if not used)
     @Override

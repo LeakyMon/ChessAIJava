@@ -82,14 +82,19 @@ public class ChessBoard {
     }
 
     public void setKingPosition(String color, int row, int col) {
+        System.out.println("setting king position " + color);
         if ("White".equals(color)) {
             whiteKingPosition = new Position(row, col);
         } else if ("Black".equals(color)) {
             blackKingPosition = new Position(row, col);
         }
+        System.out.println(whiteKingPosition);
+        System.out.println(blackKingPosition);
     }
 
     public Position getKingPosition(String color) {
+
+
         return "White".equals(color) ? whiteKingPosition : blackKingPosition;
     }
 
@@ -97,27 +102,39 @@ public class ChessBoard {
 
     }
 
-
+    public String toBoardCoordinate(int row, int col) {
+        char colLetter = (char) ('A' + col);
+        int rowNumber = SIZE - row; // Assuming your board rows start from 0 at the bottom
+        return "" + colLetter + rowNumber;
+    }
 
     public ThreatState getThreatState() {
         return threatState;
     }
 
+    /*
     public ThreatState checkThreatState(ArrayList<Move> legalMovesPiece, ChessBoard chessBoard){
-
+        int Kingx = chessBoard.getKingPosition("White").getCol();
+        int Kingy = chessBoard.getKingPosition("White").getRow();
+        String kingPos = toBoardCoordinate(Kingy,Kingx);
+        System.out.println(kingPos);
+        System.out.println("King X: " + Kingx + " King Y: " + Kingy);
         for (Move potentialMove : legalMovesPiece) {
             System.out.println("Evaluating move " + potentialMove);
             //System.out.println(getThreatState().isUnderThreat(potentialMove.toThreatState(potentialMove)));
             if (getThreatState().isUnderThreat(potentialMove.toThreatState(potentialMove))){
+                if (potentialMove.getNewY() == Kingy && potentialMove.getNewX() == Kingx) {
+                    System.out.println("White King is in Check!");
+                }
                 System.out.println("Warning Piece in King Threat Zone!");
                 getThreatState().setKingMoveable(potentialMove.toThreatState(potentialMove),false);
             }
-
-
         }
 
         return null;
     }
+
+     */
     public void simulateMove(int startRow, int startCol, int endRow, int endCol) {
         ChessPiece movingPiece = this.board[startRow][startCol];
         if (movingPiece.getType(movingPiece).equals("King")){
